@@ -1,0 +1,1 @@
+{'status': 400, 'error': 'VALIDATION_ERROR', 'message': 'password: Password must contain upper, lower, digit, and special character', 'path': '/api/auth/login', 'timestamp': '2026-03-07T07:28:21.445023415Z'}
