@@ -1,1 +1,1 @@
-{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Missing email","status":"failed","testResultsByEnv":{"default":"10788cbca0f3a282837ee334f74e0ee7"}}
+{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Missing password","status":"failed","testResultsByEnv":{"default":"b99346c0de841ad76cf10a8ad5ab73be"}}
