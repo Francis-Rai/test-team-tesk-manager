@@ -1,1 +1,1 @@
-{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Missing password","status":"failed","testResultsByEnv":{"default":"b99346c0de841ad76cf10a8ad5ab73be"}}
+{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"24d1fc7a2ee31337103b9490f7d52ee3"}}
