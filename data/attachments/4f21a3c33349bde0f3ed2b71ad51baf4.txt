@@ -1,0 +1,20 @@
+Status: 200
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Tue, 10 Mar 2026 11:43:41 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+{
+  "token": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyXzk0ZWM2NDU2QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJ1c2VySWQiOiIzODBmY2JlNS1lNGE0LTQ3YzgtYjMwYS0zMDQxODEwOTA2ZWUiLCJpYXQiOjE3NzMxNDMwMjEsImV4cCI6MTc3MzIyOTQyMX0._H4EqktwfUQZ9NNMdMCJGGaWa6hDzGAWFjxH5Qu_RfCL91Vea4t64MNergapnCmQ"
+}

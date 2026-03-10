@@ -1,0 +1,15 @@
+GET http://localhost:8080/api/auth/login
+
+Headers:
+User-Agent: python-requests/2.32.5
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 63
+
+Body:
+{
+  "email": "user_da953ccb@test.com",
+  "password": "g7%Rvg1)9Y0H"
+}
