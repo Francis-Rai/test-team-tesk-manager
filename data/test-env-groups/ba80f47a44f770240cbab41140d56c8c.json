@@ -1,1 +1,1 @@
-{"id":"ba80f47a44f770240cbab41140d56c8c","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_successful","name":"Register with unique email","status":"passed","testResultsByEnv":{"default":"6a771185ea953b440a15176b7a9d7fee"}}
+{"id":"ba80f47a44f770240cbab41140d56c8c","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_successful","name":"Register with unique email","status":"failed","testResultsByEnv":{"default":"80208ebd8d43e8bbb540bc8227068ee9"}}

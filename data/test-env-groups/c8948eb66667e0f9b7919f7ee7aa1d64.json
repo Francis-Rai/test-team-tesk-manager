@@ -1,1 +1,1 @@
-{"id":"c8948eb66667e0f9b7919f7ee7aa1d64","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_exceptions","name":"firstName is null","status":"failed","testResultsByEnv":{"default":"90f0490ffacec8fe5093c7789b63d7d3"}}
+{"id":"c8948eb66667e0f9b7919f7ee7aa1d64","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_exceptions","name":"Payload is null","status":"failed","testResultsByEnv":{"default":"6edd8ad56fef4bfda1d19891499a8e71"}}

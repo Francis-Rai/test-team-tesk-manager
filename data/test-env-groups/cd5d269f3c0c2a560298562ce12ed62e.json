@@ -1,1 +1,1 @@
-{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Payload is null","status":"failed","testResultsByEnv":{"default":"ec4bd5d47ab14b099a047d248c8ebd77"}}
+{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Password is not a strong password","status":"failed","testResultsByEnv":{"default":"e747793477b416a6b5f24e386ddc41d2"}}
