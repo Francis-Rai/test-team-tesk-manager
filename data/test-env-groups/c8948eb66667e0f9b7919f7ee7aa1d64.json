@@ -1,1 +1,1 @@
-{"id":"c8948eb66667e0f9b7919f7ee7aa1d64","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_exceptions","name":"Missing email","status":"failed","testResultsByEnv":{"default":"9cbaff06e152871b274ae039ed1fec2c"}}
+{"id":"c8948eb66667e0f9b7919f7ee7aa1d64","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_exceptions","name":"Password is not a string","status":"failed","testResultsByEnv":{"default":"a71fce48d0f42234730304f11a87952f"}}
