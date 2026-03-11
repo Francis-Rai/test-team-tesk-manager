@@ -1,1 +1,1 @@
-{"id":"c8948eb66667e0f9b7919f7ee7aa1d64","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_exceptions","name":"Email is null","status":"failed","testResultsByEnv":{"default":"d1e87496154fc1d1cc0c4e39d33364c2"}}
+{"id":"c8948eb66667e0f9b7919f7ee7aa1d64","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_exceptions","name":"firstName is not a string","status":"failed","testResultsByEnv":{"default":"462930791e145f104e805cd5253760dd"}}
