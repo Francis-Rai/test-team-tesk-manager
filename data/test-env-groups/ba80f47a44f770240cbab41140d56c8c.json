@@ -1,1 +1,1 @@
-{"id":"ba80f47a44f770240cbab41140d56c8c","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_successful","name":"Register with unique email","status":"passed","testResultsByEnv":{"default":"85dfbc34936b67ea60776be916b81d66"}}
+{"id":"ba80f47a44f770240cbab41140d56c8c","fullName":"qa.api.tests.auth.test_register.TestRegister#test_register_successful","name":"Register with whitespaces","status":"passed","testResultsByEnv":{"default":"9e15874a44bf96ebdc0fe41a6088155d"}}
