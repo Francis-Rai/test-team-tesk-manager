@@ -1,1 +1,5 @@
 .env
+*.pyc
+/allure-report
+/allure-results
+test-history/allure-history.jsonl

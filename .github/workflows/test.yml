@@ -4,3 +4,118 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+
+      # Install Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+
+      # Install dependencies
+      - name: Install dependencies
+        run: |
+          pip install -r qa/requirements.txt
+
+
+      # Install Allure CLI
+      - name: Install Allure
+        run: |
+          npm install -g allure
+          allure --version
+
+      # Start docker environment
+      - name: Start containers
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          BOOTSTRAP_ADMIN_EMAIL: ${{ secrets.BOOTSTRAP_ADMIN_EMAIL }}
+          BOOTSTRAP_ADMIN_PASSWORD: ${{ secrets.BOOTSTRAP_ADMIN_PASSWORD }}
+        run: |
+          docker compose up -d --build
+
+      # Wait for backend to be ready
+      - name: Wait for backend
+        id: backend_check
+        run: |
+          for i in {1..30}; do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080 || true)
+
+            if [ "$STATUS" != "000" ]; then
+              echo "Backend responding with HTTP $STATUS"
+              exit 0
+            fi
+
+            echo "Waiting for backend..."
+            sleep 5
+          done
+
+          echo "Backend never became ready"
+          docker compose logs
+          exit 1
+
+      # Checkout gh-pages branch to get previous history
+      - name: Checkout gh-pages
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+        continue-on-error: true
+
+      # Copy history if exists
+      - name: Restore Allure history
+        run: |
+          if [ -d "gh-pages/test-history" ]; then
+            mkdir -p test-history
+            cp -r gh-pages/test-history/* test-history
+          fi
+
+      - name: Run tests
+        run: pytest qa/ --alluredir=allure-results --clean-alluredir --allure-no-capture
+
+      # Generate new report
+      - name: Generate Allure report
+        if: always() && steps.backend_check.outcome == 'success'
+        run: |
+          rm -rf allure-report
+          allure generate allure-results -o allure-report --history-limit=5
+
+      # Deploy report to gh-pages
+      - name: Deploy report
+        if: always() && steps.backend_check.outcome == 'success'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-report
+
+      - name: Deploy history
+        if: always() && steps.backend_check.outcome == 'success'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: test-history
+          destination_dir: test-history
+
+
+      - name: Stop containers
+        if: always()
+        run: docker compose down
