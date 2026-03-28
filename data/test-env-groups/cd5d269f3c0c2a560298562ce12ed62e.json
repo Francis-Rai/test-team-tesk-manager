@@ -1,1 +1,0 @@
-{"id":"cd5d269f3c0c2a560298562ce12ed62e","fullName":"qa.api.tests.auth.test_login.TestLogin#test_login_exceptions","name":"Missing email","status":"failed","testResultsByEnv":{"default":"c6056d1f3e32eec167791255f6a9da64"}}

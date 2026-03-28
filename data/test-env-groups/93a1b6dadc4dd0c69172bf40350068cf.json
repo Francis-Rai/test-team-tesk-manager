@@ -1,0 +1,1 @@
+{"id":"93a1b6dadc4dd0c69172bf40350068cf","fullName":"qa.tests.api.auth.test_register.TestRegister#test_register_exceptions","name":"Missing password","status":"failed","testResultsByEnv":{"default":"b42c8d5fe8783aab3d1986680646e118"}}

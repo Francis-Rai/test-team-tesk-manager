@@ -1,0 +1,1 @@
+{"id":"4024b1a1c963284df15367fd4977ffcb","fullName":"qa.tests.api.auth.test_register.TestRegister#test_register_successful","name":"Register with unique email","status":"passed","testResultsByEnv":{"default":"3f8c0cf37ff690d7e30416de034baaee"}}
