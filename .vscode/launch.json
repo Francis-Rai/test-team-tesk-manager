@@ -2,19 +2,40 @@
   "version": "0.2.0",
   "configurations": [
     {
-        "name": "Debug Pytest + Allure",
-        "type": "python",
-        "request": "launch",
-        "module": "pytest",
-        "args": [
-            "-s",
-            "-vv",
-            "--alluredir=allure-results",
-            "--clean-alluredir"
-        ],
-        "console": "integratedTerminal",
-        "justMyCode": false,
-        "postDebugTask": "serve-allure-report"
+      "name": "Run All Tests",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/qa/app.py",
+      "args": [
+        "--test-types", "api", "bdd",
+        "--serve",
+        "--port", "63079",
+      ],
+      "console": "integratedTerminal",
+    },
+    {
+      "name": "Run API Tests",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/qa/app.py",
+      "args": [
+        "--test-types", "api",
+        "--serve",
+        "--port", "63079",
+      ],
+      "console": "integratedTerminal",
+    },
+    {
+      "name": "Run BDD Tests",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/qa/app.py",
+      "args": [
+        "--test-types", "bdd",
+        "--serve",
+        "--port", "63079",
+      ],
+      "console": "integratedTerminal",
     }
   ]
 }

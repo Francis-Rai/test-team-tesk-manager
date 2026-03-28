@@ -90,13 +90,6 @@ jobs:
       - name: Run tests and generate report
         run: python qa/app.py --test-types api bdd
 
-      # # Generate new report
-      # - name: Generate Allure report
-      #   if: always() && steps.backend_check.outcome == 'success'
-      #   run: |
-      #     rm -rf allure-report
-      #     allure generate allure-results -o allure-report --history-limit=5
-
       # Deploy report to gh-pages
       - name: Deploy report
         if: always() && steps.backend_check.outcome == 'success'
