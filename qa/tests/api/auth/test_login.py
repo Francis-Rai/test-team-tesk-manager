@@ -1,15 +1,14 @@
 import pytest
 import allure
-from qa.api.test_data.login_params import login, login_exceptions
-from qa.api.models.auth_models import LoginErrorResponse, LoginRequest
+from qa.tests.api.test_data.login_params import login, login_exceptions
+from qa.models.auth_models import LoginErrorResponse, LoginRequest
 from qa.utils.test_helpers import assert_error_response, set_report_parameters
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
-from qa.api.clients.auth_client import AuthClient
+from qa.clients.auth_client import AuthClient
 
-@allure.parent_suite("API Tests")
-@allure.suite("Auth API Tests")
-@allure.sub_suite("Login API Tests")
+@allure.suite("Authentication")
+@allure.sub_suite("Login")
 @allure.tag("api")
 class TestLogin:
     client = AuthClient(BASE_API_URL)

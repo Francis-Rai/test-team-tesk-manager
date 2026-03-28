@@ -1,7 +1,7 @@
 import pytest
 import json
 import allure
-from qa.api.models.common_models import ErrorResponse
+from qa.models.common_models import ErrorResponse
 
 
 def load_test_cases(data):
