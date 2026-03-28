@@ -1,0 +1,17 @@
+POST http://localhost:8080/api/auth/register
+
+Headers:
+User-Agent: python-requests/2.33.0
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 100
+
+Body:
+{
+  "firstName": 1,
+  "lastName": "User",
+  "email": "user_ea2d52cd@test.com",
+  "password": "ctxT*}*x\"6'{"
+}
