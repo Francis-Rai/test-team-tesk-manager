@@ -1,6 +1,6 @@
 import pytest
 from qa.config.settings import BASE_API_URL
-from qa.api.clients.auth_client import AuthClient
+from qa.clients.auth_client import AuthClient
 from qa.utils.data_generator import generate_email, generate_password
 
 @pytest.fixture

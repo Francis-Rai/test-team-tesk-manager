@@ -1,5 +1,15 @@
 {
   "name": "Team Task Manager - Test Report",
   "historyPath": "./test-history/allure-history.jsonl",
-  "appendHistory": true
+  "appendHistory": true,
+  "plugins": {
+    "awesome": {
+      "options": {
+        "groupBy": ["suite", "subSuite"]
+      }
+    }
+  },
+  "defaultLabels": {
+    "severity": "normal"
+  }
 }

@@ -4,3 +4,5 @@ playwright
 python-dotenv
 allure-pytest
 pydantic
+behave
+allure-behave

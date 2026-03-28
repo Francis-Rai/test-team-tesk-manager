@@ -87,15 +87,8 @@ jobs:
             cp -r gh-pages/test-history/* test-history
           fi
 
-      - name: Run tests
-        run: pytest qa/ --alluredir=allure-results --clean-alluredir --allure-no-capture
-
-      # Generate new report
-      - name: Generate Allure report
-        if: always() && steps.backend_check.outcome == 'success'
-        run: |
-          rm -rf allure-report
-          allure generate allure-results -o allure-report --history-limit=5
+      - name: Run tests and generate report
+        run: python qa/app.py --test-types api bdd
 
       # Deploy report to gh-pages
       - name: Deploy report
