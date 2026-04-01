@@ -1,15 +1,17 @@
 import argparse
 import subprocess
+import pytest
 import sys
 import os
 import shutil
+from behave.__main__ import main as behave_main
 
 
 TEST_PATHS = {"api": "api", "bdd": "bdd/features"}
 
 COMMANDS = {
-    "api": "pytest {test_path} --alluredir={results} --allure-no-capture {args}",
-    "bdd": "behave {test_path} -f allure_behave.formatter:AllureFormatter --outfile={results} {args}",
+    "api": "{test_path} --alluredir={results} --allure-no-capture {args}",
+    "bdd": "{test_path} -f allure_behave.formatter:AllureFormatter --outfile={results} {args}",
 }
 
 ALLURE_RESULTS = "allure-results"
@@ -22,23 +24,45 @@ def clean_folder(folder):
         shutil.rmtree(folder)
     os.makedirs(folder, exist_ok=True)
 
-def run_command(command, ignore_failures):
-    """Run a shell command and stream output."""
-    print(f"Running: {command}")
-    process = subprocess.Popen(
-        command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-    )
-    # Stream output live
-    for line in process.stdout:
-        print(line.decode(), end="")
-    process.wait()
+def run_command(command, test_type="", ignore_failures=False):
+    print(f"Running {test_type} tests with command: {command}\n")
 
-    if process.returncode != 0:
-        if ignore_failures:
-            print(f"Warning: command exited with code {process.returncode}, continuing...")
+    try:
+        if test_type == "api":
+            # Split the command into pytest arguments
+            # Remove the "pytest" word from template since we'll call pytest.main
+            pytest_args = command.split()
+            exit_code = pytest.main(pytest_args)
+        elif test_type == "bdd":
+            behave_args = command.split()
+            exit_code = behave_main(behave_args)
         else:
-            print(f"Error: command failed with code {process.returncode}")
-            sys.exit(process.returncode)
+            result = subprocess.run(
+                command,
+                shell=True,
+                check=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                text=True
+            )
+            print(result.stdout)
+
+            exit_code = result.returncode
+
+        if exit_code != 0:
+            if ignore_failures:
+                print(f"Warning: {test_type} tests exited with code {exit_code}, continuing...")
+            else:
+                print(f"Error: {test_type} tests failed with code {exit_code}")
+                sys.exit(exit_code)
+
+    except Exception as e:
+        if ignore_failures:
+            print(f"Warning: exception running {test_type} tests: {e}")
+        else:
+            print(f"Error: exception running {test_type} tests: {e}")
+            raise
+
 
 def main():
     parser = argparse.ArgumentParser(description="Run Automated Tests")
@@ -76,7 +100,7 @@ def main():
 
     parser.add_argument(
         "--additional-args",
-        type=str,
+        nargs=argparse.REMAINDER,
         default="",
         help="Extra arguments to append to test runner",
     )
@@ -89,9 +113,9 @@ def main():
         command = COMMANDS[ttype].format(
             test_path=f"qa/tests/{TEST_PATHS[ttype]}",
             results=args.output,
-            args=args.additional_args,
+            args=" ".join(args.additional_args or []),
         )
-        run_command(command, ignore_failures=True)
+        run_command(command, test_type=ttype, ignore_failures=True)
     clean_folder(ALLURE_REPORT)
     run_command(
         f"allure generate {args.output} -o {ALLURE_REPORT} --history-limit={args.history_limit}",

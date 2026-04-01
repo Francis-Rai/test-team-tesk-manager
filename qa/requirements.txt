@@ -6,3 +6,4 @@ allure-pytest
 pydantic
 behave
 allure-behave
+psycopg2
