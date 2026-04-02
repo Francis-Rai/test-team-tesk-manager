@@ -23,8 +23,9 @@ class TestRegister:
         with allure.step("Send register request"):
             response = self.client.register(test_data["request"])
 
-        assert response.status_code == 200
-        assert "token" in response.json()
+        with allure.step("Assert API response"):
+            assert response.status_code == 200
+            assert "token" in response.json()
 
         with allure.step("Get user details"):
             # TODO to add after get user api is created
@@ -52,8 +53,9 @@ class TestRegister:
                 request=test_data["request"], method=test_data.get("method", None)
             )
 
-        assert response.status_code == test_data["response"]["status"]
-        assert_error_response(
-            actual=RegisterErrorResponse(**response.json()),
-            expected=test_data["response"],
-        )
+        with allure.step("Assert API response"):
+            assert response.status_code == test_data["response"]["status"]
+            assert_error_response(
+                actual=RegisterErrorResponse(**response.json()),
+                expected=test_data["response"],
+            )

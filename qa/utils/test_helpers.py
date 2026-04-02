@@ -1,7 +1,7 @@
-import pytest
 import json
 import allure
 from qa.models.api.common_models import ErrorResponse
+from jsonschema import validate, ValidationError
 
 
 def attach_api_data(request_payload, response):
@@ -52,3 +52,17 @@ def set_report_parameters(test_params: dict):
                 value=v.model_dump() if hasattr(v, "model_dump") else v,
                 excluded=True
             )
+
+
+
+def validate_response(response_json: dict, schema: dict) -> None:
+    """
+    Validates API response against a JSON schema.
+
+    Raises:
+        AssertionError: if validation fails
+    """
+    try:
+        validate(instance=response_json, schema=schema)
+    except ValidationError as e:
+        raise AssertionError(f"Schema validation failed: {e.message}")

@@ -1,9 +1,11 @@
 import pytest
 import allure
-from qa.tests.api.test_data.user_params import get_all_users, get_all_users_exceptions
+from qa.tests.api.test_data.get_all_users_params import get_all_users, get_all_users_exceptions
+from qa.tests.api.schema.user_schema import GET_ALL_USERS_SCHEMA as schema
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
 from qa.clients.api.user_client import UserClient
+from qa.utils.test_helpers import validate_response, assert_error_response
 
 @allure.suite("User")
 @allure.sub_suite("GetUsers")
@@ -24,8 +26,10 @@ class TestGetAllUsers:
         with allure.step("Send get all users request"):
             response = self.client.get_all_users(env)
 
-        assert response.status_code == 200
-        assert response.json()
+        with allure.step("Assert API response"):
+            assert response.status_code == 200, "Failed to get all users"
+            response_json = response.json()
+            validate_response(response_json=response_json, schema=schema)
 
     @pytest.mark.parametrize(
         "login_user,test_data",
@@ -45,10 +49,7 @@ class TestGetAllUsers:
         with allure.step("Send get all users request"):
             response = self.client.get_all_users(env, headers=headers, method=method)
 
-        assert response.status_code
-        assert response.json()
-
-        # assert response.status_code == test_data["response"]["status"]
-        # assert_error_response(
-        #     actual=LoginErrorResponse(**response.json()), expected=test_data["response"]
-        # )
+        with allure.step("Assert API response"):
+            assert (
+                response.status_code == test_data["response"]["status"]
+            ), f"Incorrect status code. Response: {response.text}"

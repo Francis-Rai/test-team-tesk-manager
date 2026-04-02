@@ -7,3 +7,4 @@ pydantic
 behave
 allure-behave
 psycopg2
+jsonschema

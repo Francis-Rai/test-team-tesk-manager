@@ -7,16 +7,17 @@ from qa.config.settings import ENDPOINTS
 class AuthClient(BaseClient):
 
     def register(self, request: dict, method=None, attach=True):
+        endpoint = ENDPOINTS["register"]
         if hasattr(request, "model_dump"):
             request = request.model_dump()
 
         if method:
             set_report_parameters({"method": method})
             response = self.send_request(
-                method=method, endpoint=ENDPOINTS["register"], json=request
+                method=method, endpoint=endpoint, json=request
             )
         else:
-            response = self.post(ENDPOINTS["register"], json=request)
+            response = self.post(endpoint, json=request)
 
         if attach:
             attach_api_data(request, response)
@@ -24,16 +25,17 @@ class AuthClient(BaseClient):
         return response
 
     def login(self, request: LoginRequest | dict, method=None, attach=True):
+        endpoint = ENDPOINTS["login"]
         if hasattr(request, "model_dump"):
             request = request.model_dump()
 
         if method:
             set_report_parameters({"method": method})
             response = self.send_request(
-                method=method, endpoint=ENDPOINTS["login"], json=request
+                method=method, endpoint=endpoint, json=request
             )
         else:
-            response = self.post(ENDPOINTS["login"], json=request)
+            response = self.post(endpoint, json=request)
 
         if attach:
             attach_api_data(request, response)
