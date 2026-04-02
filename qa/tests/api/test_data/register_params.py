@@ -10,7 +10,7 @@ setup = {
     )
 }
 
-register = [
+success_cases = [
     {
         "description": "Register with unique email",
         "request": RegisterRequest(
@@ -31,7 +31,7 @@ register = [
     },
 ]
 
-register_exceptions = [
+error_cases = [
     {
         "description": "Payload is null",
         "request": None,

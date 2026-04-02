@@ -3,7 +3,7 @@ from qa.config.settings import SUPER_USER_EMAIL, SUPER_USER_PASSWORD
 from qa.models.api.auth_models import LoginRequest
 
 
-login = [
+success_cases = [
     {
         "description": "Login as a user",
         "request": {},
@@ -14,7 +14,7 @@ login = [
     },
 ]
 
-login_exceptions = [
+error_cases = [
     {
         "description": "Payload is null",
         "request": None,

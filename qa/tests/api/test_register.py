@@ -1,6 +1,6 @@
 import pytest
 import allure
-from qa.tests.api.test_data.register_params import register, register_exceptions
+from qa.tests.api.test_data.register_params import success_cases, error_cases
 from qa.models.api.auth_models import RegisterErrorResponse
 from qa.utils.test_helpers import assert_error_response, set_report_parameters
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
@@ -14,7 +14,7 @@ from qa.clients.api.auth_client import AuthClient
 class TestRegister:
     client = AuthClient(BASE_API_URL)
 
-    @pytest.mark.parametrize("test_data", register)
+    @pytest.mark.parametrize("test_data", success_cases)
     @allure.tag(SUCCESS_TAG)
     def test_register_successful(self, test_data):
         allure.dynamic.title(test_data["description"])
@@ -31,7 +31,7 @@ class TestRegister:
             # TODO to add after get user api is created
             pass
 
-    @pytest.mark.parametrize("test_data", register_exceptions)
+    @pytest.mark.parametrize("test_data", error_cases)
     @allure.tag(ERROR_TAG)
     def test_register_exceptions(self, test_data):
         allure.dynamic.title(test_data["description"])

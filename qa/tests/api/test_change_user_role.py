@@ -10,7 +10,7 @@ from qa.utils.test_helpers import validate_response, assert_error_response
 @allure.suite("User")
 @allure.sub_suite("GetUsers")
 @allure.tag("api")
-class TestGetAllUsers:
+class TestChangeUserRole:
     client = UserClient(BASE_API_URL)
 
     @pytest.mark.parametrize(
@@ -19,7 +19,7 @@ class TestGetAllUsers:
         indirect=["login_user"]
     )
     @allure.tag(SUCCESS_TAG)
-    def test_get_all_users_successful(
+    def test_change_user_role_successful(
         self, login_user, test_data, env
     ):
         allure.dynamic.title(test_data["description"])
@@ -37,7 +37,7 @@ class TestGetAllUsers:
         indirect=["login_user"]
     )
     @allure.tag(ERROR_TAG)
-    def test_get_all_users_exceptions(
+    def test_change_user_role_exceptions(
         self, login_user, test_data, env
     ):
         allure.dynamic.title(test_data["description"])

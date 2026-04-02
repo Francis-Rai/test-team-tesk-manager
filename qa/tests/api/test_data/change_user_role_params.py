@@ -1,13 +1,13 @@
 from qa.config.enums import UserRole
 
-success_cases = [
+change_user_role = [
     {"description": "Get all users as a normal user", "role": UserRole.USER},
     {"description": "Get all users as a normal user", "role": UserRole.ADMIN},
     {"description": "Get all users as a super admin", "role": UserRole.SUPER_ADMIN},
 ]
 
 
-error_cases = [
+change_user_role_exceptions = [
     {
         "description": "Missing Authorization token",
         "role": UserRole.USER,
