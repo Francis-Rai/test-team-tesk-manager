@@ -1,18 +1,23 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import AuthPage from "../pages/AuthPage";
-import DashboardPage from "../pages/DashboardPage";
-import ProjectsPage from "../pages/ProjectsPage";
 import ErrorPage from "../pages/ErrorPage";
 
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 
+import TeamSelectionPage from "../pages/TeamSelectionPage";
+import TaskDetailsPage from "../pages/TaskDetailsPage";
+import ProjectDetailsPage from "../pages/ProjectDetailsPage";
+import ProjectsView from "../features/projects/components/ProjectsView";
+import WorkspaceLayout from "../layout/WorkspaceLayout";
+import TeamOverview from "../features/teams/components/TeamOverview";
+import TeamMembersPage from "../pages/TeamMembersPage";
+
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* LOGIN (PUBLIC) */}
         <Route
           path="/login"
           element={
@@ -22,38 +27,41 @@ export default function AppRoutes() {
           }
         />
 
-        {/* PROJECTS */}
         <Route
-          path="/projects"
+          path="/teams"
           element={
             <ProtectedRoute>
-              <ProjectsPage />
+              <TeamSelectionPage />
             </ProtectedRoute>
           }
         />
 
-        {/* PROJECT DASHBOARD */}
         <Route
-          path="/projects/:id"
+          path="/teams/:teamId"
           element={
             <ProtectedRoute>
-              <DashboardPage />
+              <WorkspaceLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route index element={<TeamOverview />} />
+          <Route path="projects" element={<ProjectsView />} />
+          <Route path="members" element={<TeamMembersPage />} />
+          {/* <Route path="activity" element={<ActivityView />} /> */}
+          <Route
+            path="/teams/:teamId/projects/:projectId"
+            element={<ProjectDetailsPage />}
+          />
+        </Route>
 
-        {/* ROOT */}
-        <Route path="/" element={<Navigate to="/projects" replace />} />
-
-        {/* EVERYTHING ELSE */}
         <Route
-          path="*"
-          element={
-            <ProtectedRoute>
-              <ErrorPage />
-            </ProtectedRoute>
-          }
+          path="/teams/:teamId/projects/:projectId/tasks/:taskId"
+          element={<TaskDetailsPage />}
         />
+
+        <Route path="/" element={<Navigate to="/teams" replace />} />
+
+        <Route path="*" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );
