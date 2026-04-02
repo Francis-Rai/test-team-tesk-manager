@@ -1,6 +1,6 @@
 import psycopg2
 import os
-from qa.clients.auth_client import AuthClient
+from qa.clients.api.auth_client import AuthClient
 
 def before_all(context):
     context.base_url = "http://localhost:8080"

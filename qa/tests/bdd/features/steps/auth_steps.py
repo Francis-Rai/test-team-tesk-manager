@@ -1,6 +1,6 @@
 from behave import given, when, then
-from qa.utils.data_generator import generate_email, generate_password
-from qa.models.auth_models import LoginRequest
+from qa.utils.common import generate_email, generate_password
+from qa.models.api.auth_models import LoginRequest
 
 @given("a registered user exists")
 def step_create_user(context):

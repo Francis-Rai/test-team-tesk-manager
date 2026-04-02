@@ -1,5 +1,5 @@
-from qa.clients.base_client import BaseClient
-from qa.models.auth_models import LoginRequest
+from qa.clients.api.base_client import BaseClient
+from qa.models.api.auth_models import LoginRequest
 from qa.utils.test_helpers import attach_api_data, set_report_parameters
 from qa.config.settings import ENDPOINTS
 

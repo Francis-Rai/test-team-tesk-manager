@@ -1,5 +1,5 @@
-from qa.utils.data_generator import generate_email, generate_password
-from qa.models.auth_models import RegisterRequest
+from qa.utils.common import generate_email, generate_password
+from qa.models.api.auth_models import RegisterRequest
 
 setup = {
     "register_user": RegisterRequest(

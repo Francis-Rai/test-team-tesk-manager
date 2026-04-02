@@ -1,6 +1,6 @@
-from qa.utils.data_generator import generate_email, generate_password
+from qa.utils.common import generate_email, generate_password
 from qa.config.settings import SUPER_USER_EMAIL, SUPER_USER_PASSWORD
-from qa.models.auth_models import LoginRequest
+from qa.models.api.auth_models import LoginRequest
 
 
 login = {
