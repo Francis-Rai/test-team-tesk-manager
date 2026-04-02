@@ -10,8 +10,9 @@ setup = {
     )
 }
 
-register = {
-    "Register with unique email": {
+register = [
+    {
+        "description": "Register with unique email",
         "request": RegisterRequest(
             firstName="Test",
             lastName="User",
@@ -19,7 +20,8 @@ register = {
             password=generate_password(),
         )
     },
-    "Register with whitespaces": {
+    {
+        "description": "Register with whitespaces",
         "request": RegisterRequest(
             firstName=" Test ",
             lastName=" User ",
@@ -27,10 +29,11 @@ register = {
             password=f"{ generate_password() }",
         )
     },
-}
+]
 
-register_exceptions = {
-    "Payload is null": {
+register_exceptions = [
+    {
+        "description": "Payload is null",
         "request": None,
         "response": {
             "status": 400,
@@ -38,7 +41,8 @@ register_exceptions = {
             "message": "Request body is missing or malformed",
         },
     },
-    "Missing firstName": {
+    {
+        "description": "Missing firstName",
         "request": {
             "lastName": "User",
             "email": generate_email(),
@@ -50,7 +54,8 @@ register_exceptions = {
             "message": "firstName: required field",
         },
     },
-    "firstName is null": {
+    {
+        "description": "firstName is null",
         "request": {
             "firstName": None,
             "lastName": "User",
@@ -63,7 +68,8 @@ register_exceptions = {
             "message": "firstName: must not be blank",
         },
     },
-    "firstName is not a string": {
+    {
+        "description": "firstName is not a string",
         "request": {
             "firstName": 1,
             "lastName": "User",
@@ -76,7 +82,8 @@ register_exceptions = {
             "message": "firstName: must be a string",
         },
     },
-    "Missing lastName": {
+    {
+        "description": "Missing lastName",
         "request": {
             "firstName": "Test",
             "email": generate_email(),
@@ -88,7 +95,8 @@ register_exceptions = {
             "message": "lastName: required field",
         },
     },
-    "lastName is null": {
+    {
+        "description": "lastName is null",
         "request": {
             "firstName": "Test",
             "lastName": None,
@@ -101,7 +109,8 @@ register_exceptions = {
             "message": "lastName: must not be blank",
         },
     },
-    "lastName is not a string": {
+    {
+        "description": "lastName is not a string",
         "request": {
             "firstName": "Test",
             "lastName": 1,
@@ -114,7 +123,8 @@ register_exceptions = {
             "message": "lastName: must be a string",
         },
     },
-    "Missing email": {
+    {
+        "description": "Missing email",
         "request": {
             "firstName": "Test",
             "lastName": "User",
@@ -126,7 +136,8 @@ register_exceptions = {
             "message": "email: required field",
         },
     },
-    "Email is null": {
+    {
+        "description": "Email is null",
         "request": {
             "firstName": "Test",
             "lastName": "User",
@@ -139,7 +150,8 @@ register_exceptions = {
             "message": "email: must not be blank",
         },
     },
-    "Email is not a string": {
+    {
+        "description": "Email is not a string",
         "request": {
             "firstName": "Test",
             "lastName": "User",
@@ -152,7 +164,8 @@ register_exceptions = {
             "message": "email: must be a string",
         },
     },
-    "Email is not a valid email": {
+    {
+        "description": "Email is not a valid email",
         "request": RegisterRequest(
             firstName="Test",
             lastName="User",
@@ -165,7 +178,8 @@ register_exceptions = {
             "message": "email: must be a well-formed email address",
         },
     },
-    "Missing password": {
+    {
+        "description": "Missing password",
         "request": {"firstName": "Test", "lastName": "User", "email": generate_email()},
         "response": {
             "status": 400,
@@ -173,7 +187,8 @@ register_exceptions = {
             "message": "password: required field",
         },
     },
-    "Password is null": {
+    {
+        "description": "Password is null",
         "request": {
             "firstName": "Test",
             "lastName": "User",
@@ -186,7 +201,8 @@ register_exceptions = {
             "message": "password: must not be blank",
         },
     },
-    "Password is not a string": {
+    {
+        "description": "Password is not a string",
         "request": {
             "firstName": "Test",
             "lastName": "User",
@@ -199,7 +215,8 @@ register_exceptions = {
             "message": "password: must be a string",
         },
     },
-    "Password is less than minimum length": {
+    {
+        "description": "Password is less than minimum length",
         "request": RegisterRequest(
             firstName="Test",
             lastName="User",
@@ -212,7 +229,8 @@ register_exceptions = {
             "message": "password: Password should be at least 8 characters",
         },
     },
-    "Password is not a strong password": {
+    {
+        "description": "Password is not a strong password",
         "request": RegisterRequest(
             firstName="Test",
             lastName="User",
@@ -225,7 +243,9 @@ register_exceptions = {
             "message": "password: Password must contain upper, lower, digit, and special character",
         },
     },
-    "Register with an email already registered": {
+    {
+        "description": "Register with an email already registered",
+        "setup": setup,
         "request": RegisterRequest(
             firstName="Test",
             lastName="User",
@@ -238,7 +258,8 @@ register_exceptions = {
             "message": "Email is already in use",
         },
     },
-    "Incorrect request method": {
+    {
+        "description": "Incorrect request method",
         "method": "GET",
         "request": RegisterRequest(
             firstName="Test",
@@ -252,4 +273,4 @@ register_exceptions = {
             "message": "Request method 'GET' not supported",
         },
     },
-}
+]

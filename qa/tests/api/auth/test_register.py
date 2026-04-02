@@ -1,11 +1,12 @@
 import pytest
 import allure
-from qa.tests.api.test_data.register_params import setup, register, register_exceptions
+from qa.tests.api.test_data.register_params import register, register_exceptions
 from qa.models.api.auth_models import RegisterErrorResponse
 from qa.utils.test_helpers import assert_error_response, set_report_parameters
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
 from qa.clients.api.auth_client import AuthClient
+
 
 @allure.suite("Authentication")
 @allure.sub_suite("Register")
@@ -13,19 +14,10 @@ from qa.clients.api.auth_client import AuthClient
 class TestRegister:
     client = AuthClient(BASE_API_URL)
 
-    @pytest.fixture(scope="class", autouse=True)
-    def user_setup(self):
-        with allure.step("Setup registered user"):
-            response = self.client.register(setup["register_user"])
-        assert response.status_code == 200
-
-    @pytest.mark.parametrize("test_name", register.keys())
-    @allure.title("{test_name}")
+    @pytest.mark.parametrize("test_data", register)
     @allure.tag(SUCCESS_TAG)
-    def test_register_successful(
-        self, test_name
-    ):
-        test_data = register[test_name]
+    def test_register_successful(self, test_data):
+        allure.dynamic.title(test_data["description"])
 
         set_report_parameters(test_data["request"])
         with allure.step("Send register request"):
@@ -38,15 +30,23 @@ class TestRegister:
             # TODO to add after get user api is created
             pass
 
-    @pytest.mark.parametrize("test_name", register_exceptions.keys())
-    @allure.title("{test_name}")
+    @pytest.mark.parametrize("test_data", register_exceptions)
     @allure.tag(ERROR_TAG)
-    def test_register_exceptions(
-        self, test_name
-    ):
-        test_data = register_exceptions[test_name]
-
+    def test_register_exceptions(self, test_data):
+        allure.dynamic.title(test_data["description"])
         set_report_parameters(test_data["request"])
+
+        if test_data.get("setup"):
+            with allure.step("Setup: Register user"):
+                response = self.client.register(
+                    request=test_data["request"],
+                    method=test_data.get("method", None),
+                    attach=False,
+                )
+                assert (
+                    response.status_code == 200
+                ), f"Unable to setup register user: {response.content}"
+
         with allure.step("Send register request"):
             response = self.client.register(
                 request=test_data["request"], method=test_data.get("method", None)
@@ -54,5 +54,6 @@ class TestRegister:
 
         assert response.status_code == test_data["response"]["status"]
         assert_error_response(
-            actual=RegisterErrorResponse(**response.json()), expected=test_data["response"]
+            actual=RegisterErrorResponse(**response.json()),
+            expected=test_data["response"],
         )

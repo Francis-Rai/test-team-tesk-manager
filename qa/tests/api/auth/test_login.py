@@ -13,13 +13,15 @@ from qa.clients.api.auth_client import AuthClient
 class TestLogin:
     client = AuthClient(BASE_API_URL)
 
-    @pytest.mark.parametrize("test_name", login.keys())
-    @allure.title("{test_name}")
+    @pytest.mark.parametrize(
+        "test_data",
+        login
+    )
     @allure.tag(SUCCESS_TAG)
     def test_login_successful(
-        self, registered_user, test_name
+        self, registered_user, test_data
     ):
-        test_data = login[test_name]
+        allure.dynamic.title(test_data["description"])
         if "request" not in test_data:
             # Generate login data dynamically for the "Login as a user" case
             test_data["request"] = LoginRequest(
@@ -33,13 +35,15 @@ class TestLogin:
         assert response.status_code == 200
         assert "token" in response.json()
 
-    @pytest.mark.parametrize("test_name", login_exceptions.keys())
-    @allure.title("{test_name}")
+    @pytest.mark.parametrize(
+        "test_data",
+        login_exceptions
+    )
     @allure.tag(ERROR_TAG)
     def test_login_exceptions(
-        self, registered_user, test_name
+        self, registered_user, test_data
     ):
-        test_data = login_exceptions[test_name]
+        allure.dynamic.title(test_data["description"])
         if "request" not in test_data:
             # Generate login data dynamically for the "Login as a user" case
             test_data["request"] = LoginRequest(

@@ -3,15 +3,20 @@ from qa.config.settings import SUPER_USER_EMAIL, SUPER_USER_PASSWORD
 from qa.models.api.auth_models import LoginRequest
 
 
-login = {
-    "Login as a user": {},  # login data will be generated dynamically in the test
-    "Login as a super user": {
-        "request": LoginRequest(email=SUPER_USER_EMAIL, password=SUPER_USER_PASSWORD)
+login = [
+    {
+        "description": "Login as a user",
+        "request": {},
+    },  # login data will be generated dynamically in the test
+    {
+        "description": "Login as a super user",
+        "request": LoginRequest(email=SUPER_USER_EMAIL, password=SUPER_USER_PASSWORD),
     },
-}
+]
 
-login_exceptions = {
-    "Payload is null": {
+login_exceptions = [
+    {
+        "description": "Payload is null",
         "request": None,
         "response": {
             "status": 400,
@@ -19,7 +24,8 @@ login_exceptions = {
             "message": "Request body is missing or malformed",
         },
     },
-    "Missing email": {
+    {
+        "description": "Missing email",
         "request": {"password": generate_password()},
         "response": {
             "status": 400,
@@ -27,7 +33,8 @@ login_exceptions = {
             "message": "email: required field",
         },
     },
-    "Email is null": {
+    {
+        "description": "Email is null",
         "request": {"email": None, "password": generate_password()},
         "response": {
             "status": 400,
@@ -35,7 +42,8 @@ login_exceptions = {
             "message": "email: must not be blank",
         },
     },
-    "Email is not a string": {
+    {
+        "description": "Email is not a string",
         "request": {"email": 1, "password": generate_password()},
         "response": {
             "status": 400,
@@ -43,7 +51,8 @@ login_exceptions = {
             "message": "email: must be a string",
         },
     },
-    "Email is not a valid email": {
+    {
+        "description": "Email is not a valid email",
         "request": LoginRequest(email="invalidemail", password=generate_password()),
         "response": {
             "status": 400,
@@ -51,7 +60,8 @@ login_exceptions = {
             "message": "email: must be a well-formed email address",
         },
     },
-    "Missing password": {
+    {
+        "description": "Missing password",
         "request": {"email": generate_email()},
         "response": {
             "status": 400,
@@ -59,7 +69,8 @@ login_exceptions = {
             "message": "password: required field",
         },
     },
-    "Password is null": {
+    {
+        "description": "Password is null",
         "request": {"email": generate_email(), "password": None},
         "response": {
             "status": 400,
@@ -67,7 +78,8 @@ login_exceptions = {
             "message": "password: must not be blank",
         },
     },
-    "Password is not a string": {
+    {
+        "description": "Password is not a string",
         "request": {"email": generate_email(), "password": 2},
         "response": {
             "status": 400,
@@ -75,7 +87,8 @@ login_exceptions = {
             "message": "password: must be a string",
         },
     },
-    "Password is less than minimum length": {
+    {
+        "description": "Password is less than minimum length",
         "request": LoginRequest(email=generate_email(), password="Short1!"),
         "response": {
             "status": 400,
@@ -83,27 +96,26 @@ login_exceptions = {
             "message": "password: Password should be at least 8 characters",
         },
     },
-    "Password is not a strong password": {
-        "request": LoginRequest(
-            email=generate_email(), password="notastrongpassword"
-        ),
+    {
+        "description": "Password is not a strong password",
+        "request": LoginRequest(email=generate_email(), password="notastrongpassword"),
         "response": {
             "status": 400,
             "error": "VALIDATION_ERROR",
             "message": "password: Password must contain upper, lower, digit, and special character",
         },
     },
-    "User does not exist": {
-        "request": LoginRequest(
-            email=generate_email(), password=generate_password()
-        ),
+    {
+        "description": "User does not exist",
+        "request": LoginRequest(email=generate_email(), password=generate_password()),
         "response": {
             "status": 401,
             "error": "INVALID_CREDENTIALS",
             "message": "Invalid Credentials",
         },
     },
-    "Incorrect request method": {
+    {
+        "description": "Incorrect request method",
         "method": "GET",
         "response": {
             "status": 405,
@@ -111,4 +123,4 @@ login_exceptions = {
             "message": "Request method 'GET' not supported",
         },
     },
-}
+]

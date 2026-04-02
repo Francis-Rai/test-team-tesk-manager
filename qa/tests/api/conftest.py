@@ -7,11 +7,9 @@ from qa.utils.common import generate_email, generate_password, copy_dict
 from qa.config.enums import UserRole
 from qa.config.environment import Environment
 
-
 @pytest.fixture(scope="session")
 def env():
     return Environment()
-
 
 @pytest.fixture(scope="session")
 def db_conn():

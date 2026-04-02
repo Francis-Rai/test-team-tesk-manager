@@ -4,12 +4,6 @@ import allure
 from qa.models.api.common_models import ErrorResponse
 
 
-def load_test_cases(data):
-    return [
-        pytest.param({"name": name, **case}, id=name) for name, case in data.items()
-    ]
-
-
 def attach_api_data(request_payload, response):
     method = response.request.method
     url = response.request.url
