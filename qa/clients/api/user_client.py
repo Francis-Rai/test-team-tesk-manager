@@ -7,7 +7,7 @@ class UserClient(BaseClient):
 
     def get_all_users(self, env, method=None, headers=None, attach=True):
         endpoint = ENDPOINTS["get_all_users"]
-        if not headers:
+        if headers is None:
             headers = {"Authorization": env.token}
 
         if method:
@@ -27,7 +27,7 @@ class UserClient(BaseClient):
         self, env, user_id, request_body, method=None, headers=None, attach=True
     ):
         endpoint = ENDPOINTS["change_user_role"].format(user_id=user_id)
-        if not headers:
+        if headers is None:
             headers = {"Authorization": env.token}
 
         if method:
@@ -36,7 +36,7 @@ class UserClient(BaseClient):
                 method=method, endpoint=endpoint, json=request_body
             )
         else:
-            response = self.post(
+            response = self.patch(
                 endpoint, headers=headers, json=request_body
             )
 

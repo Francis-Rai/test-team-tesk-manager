@@ -28,6 +28,14 @@ class BaseClient:
             timeout=5
         )
 
+    def patch(self, endpoint, headers={}, json=None):
+        return requests.patch(
+            f"{self.base_url}{endpoint}",
+            json=json,
+            headers=self._headers() | headers,
+            timeout=5
+        )
+
     def put(self, endpoint, headers={}, json=None):
         return requests.put(
             f"{self.base_url}{endpoint}",

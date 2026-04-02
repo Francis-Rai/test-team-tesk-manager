@@ -72,7 +72,7 @@ def registered_user():
 @pytest.fixture
 def login_user(request, registered_user, env):
     role = request.param
-    token = registered_user["token"]
+    token = f"Bearer {registered_user['token']}"
 
     if role != UserRole.USER:
         # Login as super admin
@@ -94,7 +94,6 @@ def login_user(request, registered_user, env):
                 attach=False,
             )
             assert response.status_code == 204, f"Role change failed: {response.text}"
-            token = f"Bearer {response.json()['token']}"
         else:
             # For SUPER_ADMIN, use super admin token
             token = super_token
