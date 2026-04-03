@@ -1,1 +1,1 @@
-{"id":"770aabb6bab0236adc0ffc18980e63c1","fullName":"qa.tests.api.auth.test_login.TestLogin#test_login_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"e40c6383c09ad63172a977a9f5a149d2"}}
+{"id":"770aabb6bab0236adc0ffc18980e63c1","fullName":"qa.tests.api.auth.test_login.TestLogin#test_login_exceptions","name":"Email is not a valid email","status":"failed","testResultsByEnv":{"default":"f5923d15f11e5aa98bc6a8f51877bc91"}}
