@@ -1,7 +1,7 @@
 import requests
 
 
-class BaseClient:
+class BaseAPIClient:
 
     def __init__(self, base_api_url):
         self.base_url = base_api_url

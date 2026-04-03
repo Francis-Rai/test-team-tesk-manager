@@ -1,18 +1,18 @@
 import pytest
 import allure
 from qa.tests.api.test_data.register_params import success_cases, error_cases
-from qa.models.api.auth_models import RegisterErrorResponse
+from qa.models.api.common_models import ErrorResponse
 from qa.utils.test_helpers import assert_error_response, set_report_parameters
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
-from qa.clients.api.auth_client import AuthClient
+from qa.clients.api_client import APIClient
 
 
 @allure.suite("Authentication")
 @allure.sub_suite("Register")
 @allure.tag("api")
 class TestRegister:
-    client = AuthClient(BASE_API_URL)
+    client = APIClient(BASE_API_URL)
 
     @pytest.mark.parametrize("test_data", success_cases)
     @allure.tag(SUCCESS_TAG)
@@ -55,7 +55,10 @@ class TestRegister:
 
         with allure.step("Assert API response"):
             assert response.status_code == test_data["response"]["status"]
-            assert_error_response(
-                actual=RegisterErrorResponse(**response.json()),
-                expected=test_data["response"],
-            )
+            if test_data["response"].get("message"):
+                assert_error_response(
+                    actual=ErrorResponse(**response.json()),
+                    expected=test_data["response"],
+                )
+            else:
+                assert response.content == b''

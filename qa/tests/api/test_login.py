@@ -1,28 +1,30 @@
 import pytest
 import allure
 from qa.tests.api.test_data.login_params import success_cases, error_cases
-from qa.models.api.auth_models import LoginErrorResponse, LoginRequest
+from qa.models.api.auth_models import LoginRequest
+from qa.models.api.common_models import ErrorResponse
 from qa.utils.test_helpers import assert_error_response, set_report_parameters
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
-from qa.clients.api.auth_client import AuthClient
+from qa.clients.api_client import APIClient
 
 
 @allure.suite("Authentication")
 @allure.sub_suite("Login")
 @allure.tag("api")
 class TestLogin:
-    client = AuthClient(BASE_API_URL)
+    client = APIClient(BASE_API_URL)
 
     @pytest.mark.parametrize("test_data", success_cases)
     @allure.tag(SUCCESS_TAG)
-    def test_login_successful(self, registered_user, test_data):
+    def test_login_successful(self, user_factory, test_data):
         allure.dynamic.title(test_data["description"])
         if "request" not in test_data:
             # Generate login data dynamically for the "Login as a user" case
+            test_user = user_factory()
             test_data["request"] = LoginRequest(
-                email=registered_user["user"]["email"],
-                password=registered_user["user"]["password"],
+                email=test_user["user"]["email"],
+                password=test_user["user"]["password"],
             )
 
         set_report_parameters(test_data["request"])
@@ -35,13 +37,14 @@ class TestLogin:
 
     @pytest.mark.parametrize("test_data", error_cases)
     @allure.tag(ERROR_TAG)
-    def test_login_exceptions(self, registered_user, test_data):
+    def test_login_exceptions(self, user_factory, test_data):
         allure.dynamic.title(test_data["description"])
         if "request" not in test_data:
             # Generate login data dynamically for the "Login as a user" case
+            test_user = user_factory()
             test_data["request"] = LoginRequest(
-                email=registered_user["user"]["email"],
-                password=registered_user["user"]["password"],
+                email=test_user["user"]["email"],
+                password=test_user["user"]["password"],
             )
 
         set_report_parameters(test_data["request"])
@@ -52,6 +55,9 @@ class TestLogin:
 
         with allure.step("Assert API response"):
             assert response.status_code == test_data["response"]["status"]
-            assert_error_response(
-                actual=LoginErrorResponse(**response.json()), expected=test_data["response"]
-            )
+            if test_data["response"].get("message"):
+                assert_error_response(
+                    actual=ErrorResponse(**response.json()), expected=test_data["response"]
+                )
+            else:
+                assert response.content == b''

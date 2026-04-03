@@ -1,10 +1,10 @@
 import psycopg2
 import os
-from qa.clients.api.auth_client import AuthClient
+from qa.clients.api_client import APIClient
 
 def before_all(context):
     context.base_url = "http://localhost:8080"
-    context.auth_client = AuthClient(context.base_url)
+    context.auth_client = APIClient(context.base_url)
 
     # add conn to db
     context.db_conn = psycopg2.connect(

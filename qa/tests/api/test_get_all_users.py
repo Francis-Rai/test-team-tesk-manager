@@ -4,14 +4,15 @@ from qa.tests.api.test_data.get_all_users_params import success_cases, error_cas
 from qa.tests.api.schema.user_schema import GET_ALL_USERS_SCHEMA as schema
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
-from qa.clients.api.user_client import UserClient
+from qa.clients.api_client import APIClient
+from qa.models.api.common_models import ErrorResponse
 from qa.utils.test_helpers import validate_response, assert_error_response
 
 @allure.suite("User")
 @allure.sub_suite("GetUsers")
 @allure.tag("api")
 class TestGetAllUsers:
-    client = UserClient(BASE_API_URL)
+    client = APIClient(BASE_API_URL)
 
     @pytest.mark.parametrize(
         "login_user,test_data",
@@ -53,3 +54,9 @@ class TestGetAllUsers:
             assert (
                 response.status_code == test_data["response"]["status"]
             ), f"Incorrect status code. Response: {response.text}"
+            if test_data["response"].get("message"):
+                assert_error_response(
+                    actual=ErrorResponse(**response.json()), expected=test_data["response"]
+                )
+            else:
+                assert response.content == b''

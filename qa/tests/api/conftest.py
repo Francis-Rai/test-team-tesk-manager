@@ -2,8 +2,7 @@ import pytest
 import psycopg2
 import os
 from qa.config.settings import BASE_API_URL
-from qa.clients.api.auth_client import AuthClient
-from qa.clients.api.user_client import UserClient
+from qa.clients.api_client import APIClient
 from qa.utils.common import generate_email, generate_password
 from qa.config.enums import UserRole
 from qa.config.environment import Environment
@@ -50,53 +49,72 @@ def clean_db(db_conn):
 
 
 @pytest.fixture
-def registered_user():
-    test_user = {
-        "firstName": "Test",
-        "lastName": "User",
-        "email": generate_email(),
-        "password": generate_password(),
-    }
-    response = AuthClient(BASE_API_URL).register(test_user, attach=False)
+def user_factory(env):
+    api_client = APIClient(BASE_API_URL)
 
-    assert response.status_code == 200, (
-        f"Registration failed. "
-        f"Status: {response.status_code}, "
-        f"Body: {response.text}"
-    )
-    response_json = response.json()
-    response_json["user"].update({"password": test_user["password"]})
-    return response_json
-
-
-@pytest.fixture
-def login_user(request, registered_user, env):
-    role = request.param
-    token = f"Bearer {registered_user['token']}"
-
-    if role != UserRole.USER:
-        # Login as super admin
-        super_admin_creds = {
-            "email": os.getenv("BOOTSTRAP_ADMIN_EMAIL"),
-            "password": os.getenv("BOOTSTRAP_ADMIN_PASSWORD"),
+    def _register_user(role=UserRole.USER):
+        test_user = {
+            "firstName": "Test",
+            "lastName": "User",
+            "email": generate_email(),
+            "password": generate_password(),
         }
-        response = AuthClient(BASE_API_URL).login(super_admin_creds, attach=False)
-        assert response.status_code == 200, f"Super admin login failed: {response.text}"
-        super_token = f"Bearer {response.json()['token']}"
-        env.token = super_token
+        response = api_client.register(test_user, attach=False)
 
-        if role == UserRole.ADMIN:
-            # Change registered user to admin and get new token
-            response = UserClient(BASE_API_URL).change_user_role(
+        assert response.status_code == 200, (
+            f"Registration failed. "
+            f"Status: {response.status_code}, "
+            f"Body: {response.text}"
+        )
+        register_json = response.json()
+
+        if role != UserRole.USER:
+            # Login as super admin
+            super_admin_creds = {
+                "email": os.getenv("BOOTSTRAP_ADMIN_EMAIL"),
+                "password": os.getenv("BOOTSTRAP_ADMIN_PASSWORD"),
+            }
+            response = api_client.login(super_admin_creds, attach=False)
+            assert (
+                response.status_code == 200
+            ), f"Super admin login failed: {response.text}"
+            headers = {"Authorization": f"Bearer {response.json()['token']}"}
+
+            # Change registered user role
+            response = api_client.change_user_role(
                 env=env,
-                user_id=registered_user["user"]["userId"],
-                request_body={"role": UserRole.ADMIN.value},
+                headers=headers,
+                user_id=register_json["user"]["userId"],
+                request_body={"role": role.value},
                 attach=False,
             )
             assert response.status_code == 204, f"Role change failed: {response.text}"
-        else:
-            # For SUPER_ADMIN, use super admin token
-            token = super_token
 
-    env.token = token
-    return token
+            # check role was updated with get api
+            get_response = api_client.get_all_users(
+                env=env,
+                headers=headers,
+                attach=False,
+            )
+            assert get_response.status_code == 200, "Unable to get users"
+            user = next(
+                u
+                for u in get_response.json()
+                if u["id"] == register_json["user"]["userId"]
+            )
+            # update id key id to userId
+            user["userId"] = user.pop("id")
+            register_json.update({"user": user})
+
+        register_json["user"].update({"password": test_user["password"]})
+        return register_json
+
+    return _register_user
+
+
+@pytest.fixture
+def login_user(request, user_factory, env):
+    role = request.param
+    user = user_factory(role)
+    env.token = f"Bearer {user["token"]}"
+    return {"token": env.token, "userId": user["user"]["userId"]}
