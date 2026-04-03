@@ -2,8 +2,7 @@ import pytest
 import allure
 from qa.tests.api.test_data.register_params import success_cases, error_cases
 from qa.models.api.common_models import ErrorResponse
-from qa.utils.test_helpers import assert_error_response, set_report_parameters
-from qa.config.settings import ERROR_TAG, SUCCESS_TAG
+from qa.utils.test_helpers import assert_error_response, set_allure_metadata
 from qa.config.settings import BASE_API_URL
 from qa.clients.api_client import APIClient
 
@@ -15,11 +14,8 @@ class TestRegister:
     client = APIClient(BASE_API_URL)
 
     @pytest.mark.parametrize("test_data", success_cases)
-    @allure.tag(SUCCESS_TAG)
+    @set_allure_metadata
     def test_register_successful(self, test_data):
-        allure.dynamic.title(test_data["description"])
-
-        set_report_parameters(test_data["request"])
         with allure.step("Send register request"):
             response = self.client.register(test_data["request"])
 
@@ -32,11 +28,8 @@ class TestRegister:
             pass
 
     @pytest.mark.parametrize("test_data", error_cases)
-    @allure.tag(ERROR_TAG)
+    @set_allure_metadata
     def test_register_exceptions(self, test_data):
-        allure.dynamic.title(test_data["description"])
-        set_report_parameters(test_data["request"])
-
         if test_data.get("setup"):
             with allure.step("Setup: Register user"):
                 response = self.client.register(

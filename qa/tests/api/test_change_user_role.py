@@ -1,11 +1,10 @@
 import pytest
 import allure
 from qa.tests.api.test_data.change_user_role_params import success_cases, error_cases
-from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
 from qa.clients.api_client import APIClient
 from qa.models.api.common_models import ErrorResponse
-from qa.utils.test_helpers import assert_error_response
+from qa.utils.test_helpers import assert_error_response, set_allure_metadata
 
 
 @allure.suite("User")
@@ -19,12 +18,10 @@ class TestChangeUserRole:
         [(item["role"], item) for item in success_cases],
         indirect=["login_user"],
     )
-    @allure.tag(SUCCESS_TAG)
+    @set_allure_metadata
     def test_change_user_role_successful(
         self, login_user, test_data, env, user_factory
     ):
-        allure.dynamic.title(test_data["description"])
-
         with allure.step("Setup: Create user to change role"):
             user = user_factory(test_data["setup"]["create_user"])["user"]
             assert (
@@ -58,9 +55,8 @@ class TestChangeUserRole:
         [(item["role"], item) for item in error_cases],
         indirect=["login_user"],
     )
-    @allure.tag(ERROR_TAG)
+    @set_allure_metadata
     def test_change_user_role_exceptions(self, login_user, test_data, env, user_factory):
-        allure.dynamic.title(test_data["description"])
         headers, method = (test_data.get("headers"), test_data.get("method"))
 
         user_id = login_user["userId"]

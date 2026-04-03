@@ -100,6 +100,7 @@ error_cases = [
     },
     {
         "description": "Changing own SUPER_ADMIN role to ADMIN",
+        "severity": "critical",
         "role": UserRole.SUPER_ADMIN,
         "request": {"role": UserRole.ADMIN.value},
         "response": {
@@ -110,6 +111,7 @@ error_cases = [
     },
     {
         "description": "Changing own SUPER_ADMIN role to USER",
+        "severity": "critical",
         "role": UserRole.SUPER_ADMIN,
         "request": {"role": UserRole.USER.value},
         "response": {
