@@ -1,7 +1,6 @@
 import pytest
 import allure
 from qa.tests.api.test_data.change_user_role_params import success_cases, error_cases
-from qa.tests.api.schema.user_schema import GET_ALL_USERS_SCHEMA as schema
 from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 from qa.config.settings import BASE_API_URL
 from qa.clients.api_client import APIClient

@@ -119,6 +119,26 @@ error_cases = [
         },
     },
     {
+        "description": "Change another user's role as a normal user",
+        "role": UserRole.USER,
+        "request": {"role": UserRole.USER.value},
+        "response": {
+            "status": 403,
+            "error": "FORBIDDEN",
+            "message": "You do not have permission to perform this action.",
+        },
+    },
+    {
+        "description": "Change another user's role as an admin",
+        "role": UserRole.USER,
+        "request": {"role": UserRole.USER.value},
+        "response": {
+            "status": 403,
+            "error": "FORBIDDEN",
+            "message": "You do not have permission to perform this action.",
+        },
+    },
+    {
         "description": "Incorrect request method",
         "setup": {"create_user": UserRole.USER},
         "role": UserRole.SUPER_ADMIN,

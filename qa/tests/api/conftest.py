@@ -14,7 +14,7 @@ def env():
 
 
 @pytest.fixture(scope="session")
-def db_conn():
+def db_conn(env):
     conn = psycopg2.connect(
         dbname="taskmanager",
         user=os.getenv("DB_USERNAME"),
@@ -22,12 +22,23 @@ def db_conn():
         host="localhost",
         port="5433",
     )
+
+    # get id of original super admin
+    with conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id FROM public.users WHERE role = 'SUPER_ADMIN' LIMIT 1;")
+            result = cur.fetchone()
+            if result:
+                env.super_admin_id = result[0]
+            else:
+                pytest.exit("No SUPER_ADMIN user found")
+
     yield conn
     conn.close()
 
 
 @pytest.fixture(autouse=True)
-def clean_db(db_conn):
+def clean_db(db_conn, env):
     yield
     with db_conn:
         with db_conn.cursor() as cur:
@@ -45,7 +56,7 @@ def clean_db(db_conn):
                 print(f"Truncated tables: {other_tables}")
 
             # Clean users table but preserve super admin
-            cur.execute("DELETE FROM users WHERE role != 'SUPER_ADMIN';")
+            cur.execute(f"DELETE FROM users WHERE id != '{env.super_admin_id}';")
 
 
 @pytest.fixture
