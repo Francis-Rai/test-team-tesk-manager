@@ -1,0 +1,1 @@
+{"id":"dff7f326d584cebf739062bf3ccdadf3","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_successful","name":"test_change_user_role_successful[UserRole.SUPER_ADMIN-test_data2]","status":"broken","testResultsByEnv":{"default":"e6e1827776c7f5c399c0eff8bc4854a2"}}
