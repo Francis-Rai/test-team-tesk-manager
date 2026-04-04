@@ -26,7 +26,7 @@ import { CreateTaskModal } from "../features/tasks/components/CreateTaskModal";
 import ProjectActivity from "../features/projects/components/ProjectActivity";
 import { getProjectPermissions } from "../features/projects/utils/projectPermissions";
 import { useTeamMe } from "../features/teams/hooks/useTeamMe";
-import type { DeletedFilter } from "../common/utils/deletedFilter";
+import type { DeletedFilter } from "../common/types/deletedFilter.types";
 
 export default function ProjectPage() {
   const { teamId, projectId } = useParams<{

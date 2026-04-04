@@ -1,24 +1,23 @@
 import { apiClient } from "../../../api/apiClients";
-import type { DeletedFilter } from "../../../common/utils/deletedFilter";
-import type { Team } from "../types/teamTypes";
+import type { BaseQueryParams } from "../../../common/types/baseQuery.types";
+import type { PageResponse } from "../../../common/types/pageResponse.types";
+import type { DeletedFilter } from "../../../common/types/deletedFilter.types";
+import type { Team, TeamMe, TeamMember } from "../types/team.type";
 
-export const getTeams = async (params: {
-  page?: number;
-  size?: number;
-  search?: string;
-  status?: string;
-  sort?: string;
-  deletedFilter: DeletedFilter;
-}) => {
+export const getTeams = async (
+  params: BaseQueryParams & {
+    deletedFilter: DeletedFilter;
+  },
+): Promise<PageResponse<Team>> => {
   const response = await apiClient.get(`/teams`, { params });
   return response.data;
 };
 
-export const getAllTeams = async (params: {
-  page?: number;
-  size?: number;
-  deletedFilter: DeletedFilter;
-}) => {
+export const getAllTeams = async (
+  params: Pick<BaseQueryParams, "page" | "size"> & {
+    deletedFilter: DeletedFilter;
+  },
+): Promise<Team[]> => {
   const response = await apiClient.get(`/teams`, { params });
   return response.data.content;
 };
@@ -31,19 +30,13 @@ export const createTeam = async (data: {
   return response.data;
 };
 
-export interface TeamMeResponse {
-  userId: string;
-  role: "OWNER" | "ADMIN" | "MEMBER" | null;
-}
-
-export const getTeamMe = async (teamId: string) => {
-  const res = await apiClient.get(`/teams/${teamId}/me`);
-  return res.data as TeamMeResponse;
+export const getTeamMe = async (teamId: string): Promise<TeamMe> => {
+  const response = await apiClient.get(`/teams/${teamId}/me`);
+  return response.data;
 };
 
 export const getTeam = async (teamId: string): Promise<Team> => {
   const response = await apiClient.get(`/teams/${teamId}`);
-
   return response.data;
 };
 
@@ -58,6 +51,14 @@ export const updateTeam = async (
   return response.data;
 };
 
-export const deleteTeam = async (teamId: string) => {
+export const deleteTeam = async (teamId: string): Promise<void> => {
   await apiClient.delete(`/teams/${teamId}`);
+};
+
+export const transferTeam = async (
+  teamId: string,
+  userId: string,
+): Promise<TeamMember> => {
+  const response = await apiClient.patch(`/teams/${teamId}/transfer/${userId}`);
+  return response.data;
 };

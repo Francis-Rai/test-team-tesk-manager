@@ -1,5 +1,5 @@
 import PriorityBadge from "../../../common/components/PriorityBadge";
-import { formatDate } from "../../../common/utils/date";
+import { formatDate } from "../../../common/utils/dateFormatter";
 import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
 import { Card, CardContent, CardFooter } from "../../../components/ui/card";
 import { Label } from "../../../components/ui/label";
@@ -41,12 +41,12 @@ export default function TaskCard({ task, onOpen }: Props) {
             <div className="flex items-center gap-1">
               <Avatar className="h-5 w-5">
                 <AvatarFallback>
-                  {task.assignedUser.firstName?.[0]}
                   {task.assignedUser.lastName?.[0]}
+                  {task.assignedUser.firstName?.[0]}
                 </AvatarFallback>
               </Avatar>
 
-              <span>{task.assignedUser.firstName}</span>
+              <span>{task.assignedUser.lastName}</span>
             </div>
           )}
 
@@ -54,12 +54,12 @@ export default function TaskCard({ task, onOpen }: Props) {
             <div className="flex items-center gap-1">
               <Avatar className="h-5 w-5">
                 <AvatarFallback>
-                  {task.supportUser.firstName?.[0]}
                   {task.supportUser.lastName?.[0]}
+                  {task.supportUser.firstName?.[0]}
                 </AvatarFallback>
               </Avatar>
 
-              <span>{task.supportUser.firstName}</span>
+              <span>{task.supportUser.lastName}</span>
             </div>
           )}
         </div>
