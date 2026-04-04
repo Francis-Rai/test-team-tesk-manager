@@ -1,1 +1,1 @@
-{"id":"d2a6a3f82e771bab216a5b453ea91df5","fullName":"qa.tests.api.test_get_all_users.TestGetAllUsers#test_get_all_users_exceptions","name":"test_get_all_users_exceptions[UserRole.USER-test_data0]","status":"broken","testResultsByEnv":{"default":"0246d700036811140f9431fc2bbae8c0"}}
+{"id":"d2a6a3f82e771bab216a5b453ea91df5","fullName":"qa.tests.api.test_get_all_users.TestGetAllUsers#test_get_all_users_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"5c208f1af265d8fd13512131dac4845b"}}

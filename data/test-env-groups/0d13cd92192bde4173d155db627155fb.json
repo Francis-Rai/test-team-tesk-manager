@@ -1,1 +1,1 @@
-{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"test_login_exceptions[test_data7]","status":"broken","testResultsByEnv":{"default":"09f519c0c14c85dcb3686706a5416592"}}
+{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"User does not exist","status":"failed","testResultsByEnv":{"default":"76d7e6967c97a9a84b54c391623053fe"}}
