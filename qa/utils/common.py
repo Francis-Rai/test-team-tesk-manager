@@ -18,3 +18,13 @@ def generate_password(length=12):
 
 def generate_email():
     return f"user_{secrets.token_hex(4)}@test.com"
+
+
+def copy_dict(d: dict, keys_to_copy: list = None) -> dict:
+    """
+    Return a new dict containing only the specified keys from the original dict.
+    Keys that do not exist in the original dict are ignored.
+    """
+    if not keys_to_copy:
+        return d.copy()  # full copy
+    return {k: d[k] for k in keys_to_copy if k in d}

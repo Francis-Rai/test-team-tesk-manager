@@ -1,45 +1,46 @@
 import requests
 
 
-class BaseClient:
+class BaseAPIClient:
 
     def __init__(self, base_api_url):
         self.base_url = base_api_url
-        self.token = None
-
-    def set_token(self, token):
-        self.token = token
 
     def _headers(self):
         headers = {
             "Content-Type": "application/json"
         }
 
-        if self.token:
-            headers["Authorization"] = f"Bearer {self.token}"
-
         return headers
 
-    def get(self, endpoint):
+    def get(self, endpoint, headers={}):
         return requests.get(
             f"{self.base_url}{endpoint}",
-            headers=self._headers(),
+            headers=headers,
             timeout=5
         )
 
-    def post(self, endpoint, json=None):
+    def post(self, endpoint, headers={}, json=None):
         return requests.post(
             f"{self.base_url}{endpoint}",
             json=json,
-            headers=self._headers(),
+            headers=self._headers() | headers,
             timeout=5
         )
 
-    def put(self, endpoint, json=None):
+    def patch(self, endpoint, headers={}, json=None):
+        return requests.patch(
+            f"{self.base_url}{endpoint}",
+            json=json,
+            headers=self._headers() | headers,
+            timeout=5
+        )
+
+    def put(self, endpoint, headers={}, json=None):
         return requests.put(
             f"{self.base_url}{endpoint}",
             json=json,
-            headers=self._headers(),
+            headers=self._headers() | headers,
             timeout=5
         )
 
@@ -50,11 +51,11 @@ class BaseClient:
             timeout=5
         )
 
-    def send_request(self, method, endpoint, json=None):
+    def send_request(self, method, endpoint, headers={}, json=None):
         return requests.request(
             method=method,
             url=f"{self.base_url}{endpoint}",
             json=json,
-            headers=self._headers(),
+            headers=headers,
             timeout=5
         )

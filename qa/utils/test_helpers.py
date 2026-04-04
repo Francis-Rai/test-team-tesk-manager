@@ -1,13 +1,9 @@
-import pytest
+import functools
 import json
 import allure
-from qa.models.common_models import ErrorResponse
-
-
-def load_test_cases(data):
-    return [
-        pytest.param({"name": name, **case}, id=name) for name, case in data.items()
-    ]
+from qa.models.api.common_models import ErrorResponse
+from jsonschema import validate, ValidationError
+from qa.config.settings import ERROR_TAG, SUCCESS_TAG
 
 
 def attach_api_data(request_payload, response):
@@ -58,3 +54,44 @@ def set_report_parameters(test_params: dict):
                 value=v.model_dump() if hasattr(v, "model_dump") else v,
                 excluded=True
             )
+
+def set_allure_metadata(func):
+    """
+    param_metadata: dict mapping test args tuple -> metadata dict
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        # Get the test_data parameter from args/kwargs
+        test_param = kwargs.get("test_data")
+
+        if test_param:
+            # Set title
+            if title := test_param.get("description"):
+                allure.dynamic.title(title)
+
+            # Set severity
+            if severity := test_param.get("severity"):
+                allure.dynamic.severity(severity)
+
+            # set success/error tag
+            tag = ERROR_TAG if "response" in test_param else SUCCESS_TAG
+            allure.dynamic.tag(tag)
+
+            # set report parameters
+            set_report_parameters(test_param.get("request", {}))
+
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_response(response_json: dict, schema: dict) -> None:
+    """
+    Validates API response against a JSON schema.
+
+    Raises:
+        AssertionError: if validation fails
+    """
+    try:
+        validate(instance=response_json, schema=schema)
+    except ValidationError as e:
+        raise AssertionError(f"Schema validation failed: {e.message}")
