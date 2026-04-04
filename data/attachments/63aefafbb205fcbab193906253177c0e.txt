@@ -1,0 +1,11 @@
+GET http://localhost:8080/api/users
+
+Headers:
+User-Agent: python-requests/2.33.1
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyXzdmNjNkYzBjQHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJ1c2VySWQiOiI0ZGFiMzgxNy0yMjRhLTRlZDYtYmE3Yy03NDQwYzFjOGRiODEiLCJpYXQiOjE3NzUyODUzNjQsImV4cCI6MTc3NTM3MTc2NH0.-aHPVUJvUqilP04hhNzOt6kdYrklIvDPEJEgIpqcqJdDMfRjxlmBm9tE9mN5P3Ps
+
+Body:
+null

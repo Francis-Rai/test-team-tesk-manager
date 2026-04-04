@@ -1,0 +1,13 @@
+PATCH http://localhost:8080/api/admin/users/226f6ea3-d219-4b11-933a-62e1e2c92be2/role
+
+Headers:
+User-Agent: python-requests/2.33.1
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJ1c2VyX2IxYTI5Zjk2QHRlc3QuY29tIiwicm9sZSI6IlVTRVIiLCJ1c2VySWQiOiJhMjBjZDJlZi0xYzJmLTQxNTctYmNlNC0yOGEwOTE3NWRlNTIiLCJpYXQiOjE3NzUyODUzNjUsImV4cCI6MTc3NTM3MTc2NX0.gpOdoL5StCvMqAnsRd6IIbZWZAibJRITydTIpGgt5qjpbKpurcLciXbC_KQiPRDr
+Content-Length: 0
+
+Body:
+null

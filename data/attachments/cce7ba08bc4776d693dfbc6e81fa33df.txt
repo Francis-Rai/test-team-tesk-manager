@@ -1,0 +1,15 @@
+POST http://localhost:8080/api/auth/login
+
+Headers:
+User-Agent: python-requests/2.33.1
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Content-Type: application/json
+Content-Length: 58
+
+Body:
+{
+  "email": "user_7ec154a0@test.com",
+  "password": "Short1!"
+}
