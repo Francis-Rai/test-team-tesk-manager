@@ -12,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.example.task_manager.common.DeletedFilter;
 import com.example.task_manager.common.PageResponse;
 import com.example.task_manager.exception.api.BadRequestInputException;
 import com.example.task_manager.exception.api.ConflictException;
@@ -415,6 +416,12 @@ public class TaskService {
       validateMembership(teamId, requester.getId());
     }
 
+    DeletedFilter filter = request.deletedFilter();
+
+    if (!isGlobalAdmin && filter != DeletedFilter.ACTIVE) {
+      throw new ForbiddenException("Not allowed to view deleted tasks");
+    }
+
     pageable = validateSorting(pageable);
 
     Specification<TaskEntity> spec = TaskSpecification.build(
@@ -425,8 +432,7 @@ public class TaskService {
         request.assigneeId(),
         request.supportId(),
         request.overdue(),
-        request.includeDeleted(),
-        request.onlyDeleted(),
+        request.deletedFilter(),
         isGlobalAdmin);
 
     Page<TaskEntity> page = taskRepository.findAll(spec, pageable);
@@ -454,6 +460,30 @@ public class TaskService {
 
     Page<TaskEntity> page = taskRepository.findMyTasks(requester.getId(),
         pageable);
+
+    return new PageResponse<>(
+        page.map(this::mapToResponse).getContent(),
+        page.getNumber(),
+        page.getSize(),
+        page.getTotalElements(),
+        page.getTotalPages(),
+        page.isFirst(),
+        page.isLast());
+  }
+
+  /**
+   * Returns all user's task by project.
+   * Assignee and Support
+   */
+  @Transactional(readOnly = true)
+  public PageResponse<TaskResponse> getMyTasksByProject(
+      UUID projectId,
+      String requesterEmail,
+      Pageable pageable) {
+
+    UserEntity requester = getUserByEmail(requesterEmail);
+
+    Page<TaskEntity> page = taskRepository.findMyTasksByProject(projectId, requester.getId(), pageable);
 
     return new PageResponse<>(
         page.map(this::mapToResponse).getContent(),
@@ -774,7 +804,13 @@ public class TaskService {
    * Allowed Sorting Fields
    */
   private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
-      "name",
+      "title",
+      "priority",
+      "status",
+      "assignee",
+      "support",
+      "plannedStartDate",
+      "plannedDueDate",
       "createdAt",
       "updatedAt");
 

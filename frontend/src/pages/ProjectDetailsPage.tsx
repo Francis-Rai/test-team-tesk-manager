@@ -1,0 +1,258 @@
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+
+import { useProject } from "../features/projects/hooks/useProject";
+
+import TaskBoard from "../features/tasks/components/TaskBoard";
+import TaskModal from "../features/tasks/components/TaskModal";
+
+import type { Task } from "../features/tasks/types/taskTypes";
+import type { TaskStatus } from "../features/tasks/utils/taskStatus";
+
+import TaskFilters from "../features/tasks/components/TaskFilters";
+import ProjectHeader from "../features/projects/components/ProjectHeader";
+import { useDebounce } from "../common/hooks/useDebounce";
+import TaskList from "../features/tasks/components/TaskList";
+import { useUpdateTaskStatus } from "../features/tasks/hooks/useUpdateTaskStatus";
+import { useTasks } from "../features/tasks/hooks/useTasks";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/ui/tabs";
+import { Kanban, LayoutList, ListCheck } from "lucide-react";
+import { CreateTaskModal } from "../features/tasks/components/CreateTaskModal";
+import ProjectActivity from "../features/projects/components/ProjectActivity";
+import { getProjectPermissions } from "../features/projects/utils/projectPermissions";
+import { useTeamMe } from "../features/teams/hooks/useTeamMe";
+import type { DeletedFilter } from "../common/types/deletedFilter.types";
+
+export default function ProjectPage() {
+  const { teamId, projectId } = useParams<{
+    teamId: string;
+    projectId: string;
+  }>();
+
+  const [deletedFilter, setDeletedFilter] = useState<DeletedFilter>("ACTIVE");
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [createOpen, setCreateOpen] = useState(false);
+
+  const [page, setPage] = useState(0);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [sort, setSort] = useState("createdAt,desc");
+  const debouncedSearch = useDebounce(search, 400);
+
+  const { data: project, isLoading } = useProject(
+    teamId || "",
+    projectId || "",
+  );
+
+  const { data: teamMe } = useTeamMe(teamId || "");
+
+  const permissions = getProjectPermissions({
+    role: teamMe?.role ?? null,
+  });
+
+  const { data: tasksData } = useTasks(teamId || "", projectId || "", {
+    page,
+    search: debouncedSearch,
+    status,
+    sort,
+    deletedFilter,
+  });
+
+  const tasks = tasksData?.content ?? [];
+  const totalPages = tasksData?.totalPages ?? 0;
+
+  const updateStatus = useUpdateTaskStatus(teamId || "", projectId || "");
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(0);
+  };
+
+  const handleStatusFilterChange = (value: string) => {
+    setStatus(value === "ALL" ? "" : value);
+    setPage(0);
+  };
+
+  const handleDeletedFilterChange = (value: DeletedFilter) => {
+    setDeletedFilter(value);
+    setPage(0);
+  };
+
+  function handleStatusChange(taskId: string, status: TaskStatus) {
+    updateStatus.mutate({
+      taskId,
+      status,
+    });
+  }
+
+  if (!teamId || !projectId) {
+    return <div className="p-6">Invalid project</div>;
+  }
+
+  if (isLoading || !project) {
+    return <div className="p-6">Loading Project...</div>;
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="text-sm text-muted-foreground">
+        Team / {project?.name}
+      </div>
+      <ProjectHeader
+        teamId={teamId}
+        projectId={projectId}
+        name={project.name}
+        description={project?.description}
+        onCreateTask={() => setCreateOpen(true)}
+        permissions={permissions}
+      />
+      <CreateTaskModal
+        teamId={teamId}
+        projectId={projectId}
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+      />
+      <Tabs defaultValue="board">
+        <TabsList className="border rounded-md bg-muted/40 p-1 inline-flex gap-1">
+          <TabsTrigger
+            value="list"
+            className="
+      flex items-center gap-2 px-3 py-1.5 text-sm rounded-md
+      data-[state=active]:bg-background
+      data-[state=active]:shadow-sm
+      data-[state=active]:text-foreground
+      text-muted-foreground
+      hover:bg-muted
+      transition-all
+    "
+          >
+            <LayoutList className="h-4 w-4" />
+            List
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="board"
+            className="
+      flex items-center gap-2 px-3 py-1.5 text-sm rounded-md
+      data-[state=active]:bg-background
+      data-[state=active]:shadow-sm
+      data-[state=active]:text-foreground
+      text-muted-foreground
+      hover:bg-muted
+      transition-all
+    "
+          >
+            <Kanban className="h-4 w-4" />
+            Board
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="activity"
+            className="
+      flex items-center gap-2 px-3 py-1.5 text-sm rounded-md
+      data-[state=active]:bg-background
+      data-[state=active]:shadow-sm
+      data-[state=active]:text-foreground
+      text-muted-foreground
+      hover:bg-muted
+      transition-all
+    "
+          >
+            <ListCheck className="h-4 w-4" />
+            Activity
+          </TabsTrigger>
+
+          {/* <TabsTrigger
+            value="settings"
+            className="
+      flex items-center gap-2 px-3 py-1.5 text-sm rounded-md
+      data-[state=active]:bg-background
+      data-[state=active]:shadow-sm
+      data-[state=active]:text-foreground
+      text-muted-foreground
+      hover:bg-muted
+      transition-all
+    "
+          >
+            Settings
+          </TabsTrigger> */}
+        </TabsList>
+        <div className="rounded-lg border bg-background p-4">
+          <TabsContent value="board">
+            <TaskFilters
+              search={search}
+              status={status}
+              deletedFilter={deletedFilter}
+              onSearchChange={handleSearchChange}
+              onStatusFilterChange={handleStatusFilterChange}
+              onDeletedFilterChange={handleDeletedFilterChange}
+            />
+            <TaskBoard
+              teamId={teamId}
+              projectId={projectId}
+              params={{
+                search: debouncedSearch,
+                sort,
+                deletedFilter,
+              }}
+              onStatusChange={handleStatusChange}
+              onOpenTask={setSelectedTask}
+            />
+          </TabsContent>
+
+          <TabsContent value="list">
+            <TaskFilters
+              search={search}
+              status={status}
+              deletedFilter={deletedFilter}
+              onSearchChange={handleSearchChange}
+              onStatusFilterChange={handleStatusFilterChange}
+              onDeletedFilterChange={handleDeletedFilterChange}
+            />
+            <TaskList
+              tasks={tasks}
+              teamId={teamId}
+              projectId={projectId}
+              pagination={{
+                page,
+                totalPages,
+                onPageChange: setPage,
+              }}
+              sort={sort}
+              onSortChange={setSort}
+            />
+          </TabsContent>
+
+          <TabsContent value="activity">
+            <ProjectActivity
+              teamId={teamId}
+              projectId={projectId}
+              onOpenTask={(taskId) => setSelectedTask({ id: taskId } as Task)}
+            />
+          </TabsContent>
+
+          {/* <TabsContent value="settings">
+            <div className="text-sm text-muted-foreground">
+              Settings coming soon...
+            </div>
+          </TabsContent> */}
+        </div>
+      </Tabs>
+      {selectedTask && (
+        <TaskModal
+          open={!!selectedTask}
+          onClose={() => setSelectedTask(null)}
+          onTaskDeleted={() => setSelectedTask(null)}
+          taskId={selectedTask.id}
+          teamId={teamId}
+          projectId={projectId}
+        />
+      )}
+    </div>
+  );
+}

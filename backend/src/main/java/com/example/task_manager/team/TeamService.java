@@ -1,7 +1,7 @@
 package com.example.task_manager.team;
 
 import java.time.Instant;
-import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -14,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import com.example.task_manager.common.DeletedFilter;
 import com.example.task_manager.common.PageResponse;
 import com.example.task_manager.exception.api.BadRequestInputException;
 import com.example.task_manager.exception.api.ConflictException;
@@ -23,7 +24,9 @@ import com.example.task_manager.project.ProjectRepository;
 import com.example.task_manager.task.TaskRepository;
 import com.example.task_manager.team.dto.AddTeamMemberRequest;
 import com.example.task_manager.team.dto.CreateTeamRequest;
+import com.example.task_manager.team.dto.TeamMeResponse;
 import com.example.task_manager.team.dto.TeamMemberResponse;
+import com.example.task_manager.team.dto.TeamMemberSearchRequest;
 import com.example.task_manager.team.dto.TeamResponse;
 import com.example.task_manager.team.dto.TeamSearchRequest;
 import com.example.task_manager.team.dto.UpdateTeamRequest;
@@ -31,6 +34,8 @@ import com.example.task_manager.team.entity.TeamEntity;
 import com.example.task_manager.team.entity.TeamMemberEntity;
 import com.example.task_manager.team.entity.TeamRole;
 import com.example.task_manager.user.UserRepository;
+import com.example.task_manager.user.UserSpecification;
+import com.example.task_manager.user.dto.UserResponse;
 import com.example.task_manager.user.entity.UserEntity;
 import com.example.task_manager.user.entity.UserRole;
 
@@ -256,7 +261,7 @@ public class TeamService {
 
     TeamMemberEntity newOwner = getMembership(teamId, newOwnerUserId);
 
-    validateGlobalAdminAndSuperAdmin(newOwner.getUser().getRole());
+    validateGlobalAdminOrSuperAdmin(newOwner.getUser().getRole());
 
     owner.setRole(TeamRole.ADMIN);
     newOwner.setRole(TeamRole.OWNER);
@@ -306,14 +311,19 @@ public class TeamService {
   @Transactional(readOnly = true)
   public TeamResponse getActiveTeamById(
       UUID teamId,
-      String requesterEmail) {
+      Authentication authentication) {
 
-    UserEntity requester = getUserByEmail(requesterEmail);
+    UserEntity requester = getUserByEmail(authentication.getName());
 
     TeamEntity team = getActiveTeam(teamId);
 
-    validateMembership(teamId, requester.getId());
+    boolean isGlobalAdmin = authentication.getAuthorities()
+        .stream()
+        .anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN") || a.getAuthority().equals("ROLE_ADMIN"));
 
+    if (!isGlobalAdmin) {
+      validateMembership(teamId, requester.getId());
+    }
     return mapToResponse(team);
   }
 
@@ -354,10 +364,14 @@ public class TeamService {
     UUID ownerId = null, memberId = null;
 
     if (isGlobalAdmin) {
-
       ownerId = request.ownerId();
       memberId = request.memberId();
+    }
 
+    DeletedFilter filter = request.deletedFilter();
+
+    if (!isGlobalAdmin && filter != DeletedFilter.ACTIVE) {
+      throw new ForbiddenException("Not allowed to view deleted tasks");
     }
 
     Specification<TeamEntity> spec = TeamSpecification.build(
@@ -365,8 +379,7 @@ public class TeamService {
         request.search(),
         ownerId,
         memberId,
-        request.includeDeleted(),
-        request.onlyDeleted(),
+        request.deletedFilter(),
         isGlobalAdmin);
 
     pageable = validateSorting(pageable);
@@ -387,25 +400,91 @@ public class TeamService {
    * Returns all the team's members.
    */
   @Transactional(readOnly = true)
-  public List<TeamMemberResponse> getTeamMembers(
+  public PageResponse<TeamMemberResponse> getTeamMembers(
+      TeamMemberSearchRequest request,
       UUID teamId,
-      String requesterEmail) {
+      Pageable pageable,
+      Authentication authentication) {
+
+    UserEntity requester = getUserByEmail(authentication.getName());
+
+    boolean isGlobalAdmin = authentication.getAuthorities()
+        .stream()
+        .anyMatch(a -> a.getAuthority().equals("ROLE_SUPER_ADMIN") || a.getAuthority().equals("ROLE_ADMIN"));
+
+    Specification<TeamMemberEntity> spec = TeamMemberSpecification.build(
+        teamId,
+        request.search(),
+        requester.getId(),
+        isGlobalAdmin);
+
+    pageable = validateSorting(pageable);
+
+    Page<TeamMemberEntity> page = teamMemberRepository.findAll(spec, pageable);
+
+    return new PageResponse<>(
+        page.map(this::mapToMemberResponse).getContent(),
+        page.getNumber(),
+        page.getSize(),
+        page.getTotalElements(),
+        page.getTotalPages(),
+        page.isFirst(),
+        page.isLast());
+  }
+
+  /**
+   * Returns all the user thats not part of the team .
+   */
+  @Transactional(readOnly = true)
+  public PageResponse<UserResponse> getAvailableUsers(
+      String search,
+      UUID teamId,
+      Pageable pageable,
+      Authentication authentication) {
+
+    Specification<UserEntity> spec = UserSpecification.availableUsers(teamId, search);
+
+    pageable = validateSorting(pageable);
+
+    Page<UserEntity> page = userRepository.findAll(spec, pageable);
+
+    return new PageResponse<>(
+        page.map(this::mapToNonMemberResponse).getContent(),
+        page.getNumber(),
+        page.getSize(),
+        page.getTotalElements(),
+        page.getTotalPages(),
+        page.isFirst(),
+        page.isLast());
+  }
+
+  /**
+   * Returns user's team role.
+   */
+  @Transactional(readOnly = true)
+  public TeamMeResponse getMyTeamRole(UUID teamId, String requesterEmail) {
 
     UserEntity requester = getUserByEmail(requesterEmail);
+    UserRole globalRole = requester.getRole();
 
-    validateMembership(teamId, requester.getId());
+    System.out.println(requester.toString());
+    System.out.println(globalRole);
 
-    List<TeamMemberEntity> members = teamMemberRepository.findMembersByTeamId(teamId);
+    Optional<TeamMemberEntity> member = teamMemberRepository
+        .findByTeamIdAndUserId(teamId, requester.getId());
 
-    return members.stream()
-        .map(member -> new TeamMemberResponse(
-            member.getUser().getId(),
-            member.getUser().getFirstName(),
-            member.getUser().getLastName(),
-            member.getUser().getEmail(),
-            member.getRole(),
-            member.getJoinedAt()))
-        .toList();
+    // Case 1: User is a team member
+    if (member.isPresent()) {
+      return new TeamMeResponse(member.get().getId(), member.get().getRole());
+    }
+
+    // Case 2: Global / Super admin but not team member
+    if (globalRole == UserRole.ADMIN || globalRole == UserRole.SUPER_ADMIN) {
+      return new TeamMeResponse(requester.getId(), null);
+    }
+
+    // Case 3: Not allowed
+    throw new ForbiddenException("User is not a member of this team");
   }
 
   // HELPERS
@@ -442,7 +521,20 @@ public class TeamService {
         member.getUser().getLastName(),
         member.getUser().getEmail(),
         member.getRole(),
+        member.getUser().getRole(),
         member.getJoinedAt());
+  }
+
+  /**
+   * Maps a TeamMemberEntity to a TeamMemberResponse.
+   */
+  private UserResponse mapToNonMemberResponse(UserEntity user) {
+    return new UserResponse(
+        user.getId(),
+        user.getFirstName(),
+        user.getLastName(),
+        user.getEmail(),
+        user.getRole());
   }
 
   /**
@@ -529,7 +621,7 @@ public class TeamService {
     return membership;
   }
 
-  private void validateGlobalAdminAndSuperAdmin(UserRole role) {
+  private void validateGlobalAdminOrSuperAdmin(UserRole role) {
     if (role != UserRole.ADMIN
         && role != UserRole.SUPER_ADMIN) {
 
@@ -569,9 +661,14 @@ public class TeamService {
    */
   private static final Set<String> ALLOWED_SORT_FIELDS = Set.of(
       "name",
+      "lastName",
       "ownerId",
+      "joinedAt",
       "createdAt",
-      "updatedAt");
+      "updatedAt",
+      "user.lastName",
+      "user.email",
+      "role");
 
   /*
    * Check sort request
