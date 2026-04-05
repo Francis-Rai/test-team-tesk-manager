@@ -6,21 +6,48 @@ from qa.models.api.common_models import ErrorResponse
 from qa.config.settings import (
     ERROR_TAG,
     SUCCESS_TAG,
-    BASE_API_URL,
     SUPER_USER_EMAIL,
     SUPER_USER_PASSWORD,
 )
 from qa.config.enums import UserRole
 from qa.utils.common import generate_email, generate_password
 
+def _mask_sensitive_fields(obj):
+    """Recursively mask sensitive fields in a dict or list."""
+    keys_to_mask_full = ["password"]
+    keys_to_truncate = ["token", "authorization"]
+
+    if isinstance(obj, dict):
+        masked_dict = {}
+        for k, v in obj.items():
+            lk = k.lower()
+            if lk in keys_to_mask_full:
+                masked_dict[k] = "****"
+            elif lk in keys_to_truncate and isinstance(v, str):
+                # truncate: first 6 chars + ... + last 6 chars
+                if len(v) > 12:
+                    masked_dict[k] = f"{v[:12]}...{v[-6:]}"
+                else:
+                    masked_dict[k] = v  # short token, keep as-is
+            else:
+                masked_dict[k] = v
+        return masked_dict
+
+    elif isinstance(obj, list):
+        return [_mask_sensitive_fields(item) for item in obj]
+
+    else:
+        return obj
+
 def attach_api_data(request_payload, response):
     method = response.request.method
     url = response.request.url
 
     request_headers = "\n".join(
-        f"{k}: {v}" for k, v in response.request.headers.items()
+        f"{k}: {v}" for k, v in _mask_sensitive_fields(dict(response.request.headers)).items()
     )
 
+    request_payload = _mask_sensitive_fields(request_payload)
     try:
         request_body = json.dumps(request_payload, indent=2)
     except Exception:
@@ -29,11 +56,13 @@ def attach_api_data(request_payload, response):
     request_text = f"{method} {url}\n\nHeaders:\n{request_headers}\n\nBody:\n{request_body}".strip()
 
     try:
-        response_body = json.dumps(response.json(), indent=2)
+        response_body = json.dumps(_mask_sensitive_fields(response.json()), indent=2)
     except Exception:
         response_body = response.text
 
-    response_headers = "\n".join(f"{k}: {v}" for k, v in response.headers.items())
+    response_headers = "\n".join(
+        f"{k}: {v}" for k, v in _mask_sensitive_fields(dict(response.headers)).items()
+    )
 
     response_text = f"Status: {response.status_code}\n\nHeaders:\n{response_headers}\n\nBody:\n{response_body}".strip()
 
@@ -44,7 +73,6 @@ def attach_api_data(request_payload, response):
         response_text, name="response", attachment_type=allure.attachment_type.TEXT
     )
 
-
 def assert_error_response(actual: ErrorResponse, expected: dict):
     for key, value in expected.items():
         actual_value = getattr(actual, key)
@@ -54,6 +82,7 @@ def set_report_parameters(test_params: dict):
     if hasattr(test_params, "model_dump"):
         test_params = test_params.model_dump()
 
+    test_params = _mask_sensitive_fields(test_params)
     if hasattr(test_params, "items"):
         for k, v in test_params.items():
             allure.dynamic.parameter(
