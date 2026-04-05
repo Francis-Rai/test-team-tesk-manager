@@ -1,10 +1,17 @@
 import functools
 import json
 import allure
-from qa.models.api.common_models import ErrorResponse
 from jsonschema import validate, ValidationError
-from qa.config.settings import ERROR_TAG, SUCCESS_TAG
-
+from qa.models.api.common_models import ErrorResponse
+from qa.config.settings import (
+    ERROR_TAG,
+    SUCCESS_TAG,
+    BASE_API_URL,
+    SUPER_USER_EMAIL,
+    SUPER_USER_PASSWORD,
+)
+from qa.config.enums import UserRole
+from qa.utils.common import generate_email, generate_password
 
 def attach_api_data(request_payload, response):
     method = response.request.method
@@ -95,3 +102,61 @@ def validate_response(response_json: dict, schema: dict) -> None:
         validate(instance=response_json, schema=schema)
     except ValidationError as e:
         raise AssertionError(f"Schema validation failed: {e.message}")
+
+
+def create_user_via_api(api_client, role=UserRole.USER):
+    test_user = {
+        "firstName": "Test",
+        "lastName": "User",
+        "email": generate_email(),
+        "password": generate_password(),
+    }
+    response = api_client.register(test_user, attach=False)
+
+    assert response.status_code == 200, (
+        f"Registration failed. "
+        f"Status: {response.status_code}, "
+        f"Body: {response.text}"
+    )
+    register_json = response.json()
+
+    if role != UserRole.USER:
+        # Login as super admin
+        super_admin_creds = {
+            "email": SUPER_USER_EMAIL,
+            "password": SUPER_USER_PASSWORD
+        }
+        response = api_client.login(super_admin_creds, attach=False)
+        assert (
+            response.status_code == 200
+        ), f"Super admin login failed: {response.text}"
+        headers = {"Authorization": f"Bearer {response.json()['token']}"}
+
+        # Change registered user role
+        response = api_client.change_user_role(
+            env=None,
+            headers=headers,
+            user_id=register_json["user"]["userId"],
+            request_body={"role": role.value},
+            attach=False,
+        )
+        assert response.status_code == 204, f"Role change failed: {response.text}"
+
+        # check role was updated with get api
+        get_response = api_client.get_all_users(
+            env=None,
+            headers=headers,
+            attach=False,
+        )
+        assert get_response.status_code == 200, "Unable to get users"
+        user = next(
+            u
+            for u in get_response.json()
+            if u["id"] == register_json["user"]["userId"]
+        )
+        # update id key id to userId
+        user["userId"] = user.pop("id")
+        register_json.update({"user": user})
+
+    register_json["user"].update({"password": test_user["password"]})
+    return register_json

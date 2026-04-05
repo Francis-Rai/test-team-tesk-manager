@@ -23,7 +23,7 @@ class TestChangeUserRole:
         self, login_user, test_data, env, user_factory
     ):
         with allure.step("Setup: Create user to change role"):
-            user = user_factory(test_data["setup"]["create_user"])["user"]
+            user = user_factory(role=test_data["setup"]["create_user"])["user"]
             assert (
                 user["role"] == test_data["setup"]["create_user"].value
             ), "Failed to setup user. Incorrect user role."
@@ -62,7 +62,7 @@ class TestChangeUserRole:
         user_id = login_user["userId"]
         if create_user := test_data.get("setup", {}).get("create_user"):
             with allure.step("Setup: Create user to change role"):
-                user = user_factory(create_user)["user"]
+                user = user_factory(role=create_user)["user"]
                 assert (
                     user["role"] == create_user.value
                 ), "Failed to setup user. Incorrect user role."
