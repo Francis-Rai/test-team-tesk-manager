@@ -99,7 +99,7 @@ jobs:
 
       - name: Run Allure Action
         if: always() && steps.backend_check.outcome == 'success'
-        uses: allure-framework/allure-report@v0
+        uses: allure-framework/allure-report@v2
         with:
           # Path to the generated report directory
           # By default, it's set to `./allure-report`
