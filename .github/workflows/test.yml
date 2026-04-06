@@ -3,7 +3,9 @@ name: Auto Test
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 permissions:
   contents: write
