@@ -1,7 +1,7 @@
-@allure.label.suite:Authentication
+@allure.label.suite:User
 @allure.label.tag:api
 @allure.label.tag:integration
-Feature: Authentication API Integration
+Feature: User
 
 @fixture.create_user
 Scenario: Super Admin user cannot access admin resources after role is downgraded to user
