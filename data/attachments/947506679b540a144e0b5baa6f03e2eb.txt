@@ -1,0 +1,14 @@
+POST http://localhost:8080/api/admin/users/%7Buser_id%7D/role
+
+Headers:
+User-Agent: python-requests/2.33.1
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Content-Length: 16
+Content-Type: application/json
+
+Body:
+{
+  "role": "USER"
+}

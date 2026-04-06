@@ -1,0 +1,23 @@
+Status: 400
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 06 Apr 2026 09:59:43 GMT
+Connection: close
+
+Body:
+{
+  "status": 400,
+  "error": "VALIDATION_ERROR",
+  "message": "role: must not be null",
+  "path": "/api/admin/users/049e8728-ddc9-46a5-942d-e3c0e19fef94/role",
+  "timestamp": "2026-04-06T09:59:43.400092316Z"
+}

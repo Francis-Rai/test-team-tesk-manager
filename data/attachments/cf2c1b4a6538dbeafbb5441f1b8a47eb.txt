@@ -1,0 +1,27 @@
+Status: 200
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 06 Apr 2026 09:59:47 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+{
+  "token": "eyJhbGciOiJI...uWB9b7",
+  "user": {
+    "userId": "6ce434ef-2ad1-4c98-abc0-e2b8f630e61a",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "user_aa0b47d7@test.com",
+    "role": "USER"
+  }
+}
