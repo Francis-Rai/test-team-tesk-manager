@@ -1,0 +1,40 @@
+Status: 200
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 06 Apr 2026 11:23:10 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+[
+  {
+    "id": "d5fe9b01-777e-4562-8a58-68a43a33c417",
+    "firstName": "System",
+    "lastName": "Administrator",
+    "email": "superuser@example.com",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "id": "15690264-d863-4d13-a5fe-c483cfd95945",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "user_467537a4@test.com",
+    "role": "SUPER_ADMIN"
+  },
+  {
+    "id": "74794c7b-2ea7-46a7-bd5c-bf854942fdfe",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "user_8c0e5965@test.com",
+    "role": "USER"
+  }
+]

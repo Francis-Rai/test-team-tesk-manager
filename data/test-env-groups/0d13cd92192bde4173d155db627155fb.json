@@ -1,1 +1,1 @@
-{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"Password is null","status":"failed","testResultsByEnv":{"default":"8ebb40e4ecdd6ce2f7d347fe060bf58b"}}
+{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"b0698e09439934c0b76c892ded4c5860"}}

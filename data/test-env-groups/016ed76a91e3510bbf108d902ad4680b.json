@@ -1,1 +1,1 @@
-{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"Password is not a string","status":"failed","testResultsByEnv":{"default":"e5f67576f2e77989a7e54f07972fc2ba"}}
+{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"lastName is null","status":"failed","testResultsByEnv":{"default":"50256dc7d3c9ac20c281988d64a4b59b"}}

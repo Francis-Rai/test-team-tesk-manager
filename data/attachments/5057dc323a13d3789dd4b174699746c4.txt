@@ -1,0 +1,24 @@
+Status: 403
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Mon, 06 Apr 2026 11:23:13 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+{
+  "status": 403,
+  "error": "FORBIDDEN",
+  "message": "SUPER ADMIN cannot demote themselves.",
+  "path": "/api/admin/users/bd33b76c-963a-4271-8457-b19098b5a24b/role",
+  "timestamp": "2026-04-06T11:23:13.954189415Z"
+}
