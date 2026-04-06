@@ -39,7 +39,7 @@ def _mask_sensitive_fields(obj):
     else:
         return obj
 
-def attach_api_data(request_payload, response):
+def attach_api_data(request_payload, response, endpoint=""):
     method = response.request.method
     url = response.request.url
 
@@ -67,10 +67,10 @@ def attach_api_data(request_payload, response):
     response_text = f"Status: {response.status_code}\n\nHeaders:\n{response_headers}\n\nBody:\n{response_body}".strip()
 
     allure.attach(
-        request_text, name="request", attachment_type=allure.attachment_type.TEXT
+        request_text, name=f"[Request] {method} {endpoint}", attachment_type=allure.attachment_type.TEXT
     )
     allure.attach(
-        response_text, name="response", attachment_type=allure.attachment_type.TEXT
+        response_text, name=f"[Response] {method} {endpoint}", attachment_type=allure.attachment_type.TEXT
     )
 
 def assert_error_response(actual: ErrorResponse, expected: dict):

@@ -13,14 +13,12 @@ class APIClient(BaseAPIClient):
 
         if method:
             set_report_parameters({"method": method})
-            response = self.send_request(
-                method=method, endpoint=endpoint, json=request
-            )
+            response = self.send_request(method=method, endpoint=endpoint, json=request)
         else:
             response = self.post(endpoint, json=request)
 
         if attach:
-            attach_api_data(request, response)
+            attach_api_data(request, response, endpoint=endpoint)
 
         return response
 
@@ -31,14 +29,12 @@ class APIClient(BaseAPIClient):
 
         if method:
             set_report_parameters({"method": method})
-            response = self.send_request(
-                method=method, endpoint=endpoint, json=request
-            )
+            response = self.send_request(method=method, endpoint=endpoint, json=request)
         else:
             response = self.post(endpoint, json=request)
 
         if attach:
-            attach_api_data(request, response)
+            attach_api_data(request, response, endpoint=endpoint)
         return response
 
     def get_all_users(self, env, method=None, headers=None, attach=True):
@@ -48,21 +44,21 @@ class APIClient(BaseAPIClient):
 
         if method:
             set_report_parameters({"method": method})
-            response = self.send_request(
-                method=method, endpoint=endpoint
-            )
+            response = self.send_request(method=method, endpoint=endpoint)
         else:
             response = self.get(endpoint, headers=headers)
 
         if attach:
-            attach_api_data(request_payload=None, response=response)
+            attach_api_data(
+                request_payload=None, response=response, endpoint=endpoint
+            )
 
         return response
 
     def change_user_role(
         self, env, user_id, request_body, method=None, headers=None, attach=True
     ):
-        endpoint = ENDPOINTS["change_user_role"].format(user_id=user_id)
+        endpoint = ENDPOINTS["change_user_role"]
         if headers is None:
             headers = {"Authorization": env.token}
 
@@ -73,10 +69,12 @@ class APIClient(BaseAPIClient):
             )
         else:
             response = self.patch(
-                endpoint, headers=headers, json=request_body
+                endpoint.format(user_id=user_id), headers=headers, json=request_body
             )
 
         if attach:
-            attach_api_data(request_payload=None, response=response)
+            attach_api_data(
+                request_payload=request_body, response=response, endpoint=endpoint
+            )
 
         return response
