@@ -1,9 +1,13 @@
-Feature: Authentication
+@allure.label.suite:Authentication
+@allure.label.tag:api
+@allure.label.tag:integration
+Feature: Authentication API Integration
 
-  @allure.label.suite:Authentication
-  @allure.label.subSuite:Login
-  @allure.label.tag:bdd
-  Scenario: Successful login
-    Given a registered user exists
-    When the user logs in with valid credentials
-    Then the login should be successful
+@fixture.create_user
+Scenario: Super Admin user cannot access admin resources after role is downgraded to user
+  Given a user is registered with role "SUPER_ADMIN"
+  When the user accesses a "SUPER_ADMIN"-only endpoint
+  Then the API should return a successful response
+  When the user's role is updated to "USER"
+  And the user accesses a "SUPER_ADMIN"-only endpoint
+  Then the API should be forbidden
