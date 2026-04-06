@@ -3,9 +3,7 @@ import psycopg2
 from functools import partial
 from qa.config.settings import BASE_API_URL
 from qa.clients.api_client import APIClient
-from qa.utils.common import generate_email, generate_password
-from qa.config.settings import DB_USERNAME, DB_PASSWORD, SUPER_USER_EMAIL, SUPER_USER_PASSWORD
-from qa.config.enums import UserRole
+from qa.config.settings import DB_USERNAME, DB_PASSWORD
 from qa.config.environment import Environment
 from qa.utils.test_helpers import create_user_via_api
 
