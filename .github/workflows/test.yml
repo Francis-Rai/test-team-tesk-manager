@@ -9,6 +9,8 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: write
+  checks: write
 
 jobs:
 
@@ -94,6 +96,16 @@ jobs:
           BOOTSTRAP_ADMIN_EMAIL: ${{ secrets.BOOTSTRAP_ADMIN_EMAIL }}
           BOOTSTRAP_ADMIN_PASSWORD: ${{ secrets.BOOTSTRAP_ADMIN_PASSWORD }}
         run: python qa/app.py --test-types api bdd
+
+      - name: Run Allure Action
+        if: always() && steps.backend_check.outcome == 'success'
+        uses: allure-framework/allure-report@v0
+        with:
+          # Path to the generated report directory
+          # By default, it's set to `./allure-report`
+          report-directory: "./allure-report"
+          # GitHub Token that's used for posting the comments in Pull Requests
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Deploy report to gh-pages
       - name: Deploy report
