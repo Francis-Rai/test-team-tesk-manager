@@ -1,0 +1,44 @@
+Feature: Projects API Integration
+
+  @allure.label.suite:Projects
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: User creates project and can retrieve it
+    Given the user is authenticated in a team
+    When the user creates a project via API
+    Then the project creation should return status 200
+    And the project should have a valid ID
+    When the user retrieves projects for the team
+    Then the newly created project should be in the list
+
+  @allure.label.suite:Projects
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Project data persists across multiple API calls
+    Given the user creates a project with name and description
+    When the user retrieves project details
+    Then the retrieved data should match the creation request
+    When the user updates the project description
+    And retrieves the project again
+    Then the updated description should be reflected
+
+  @allure.label.suite:Projects
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Only team members can access team projects
+    Given user A is in team X
+    And user B is not in team X
+    When user B attempts to access team X's projects
+    Then the API should return status 403
+    When user A retrieves team X's projects
+    Then the API should return status 200 with project list
+
+  @allure.label.suite:Projects
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Project tasks are aggregated correctly
+    Given a project exists
+    When multiple tasks are created in the project
+    And the user retrieves project details with tasks
+    Then the task count should match the number of created tasks
+    And all task IDs should be present in the project

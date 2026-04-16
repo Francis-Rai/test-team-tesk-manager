@@ -1,0 +1,73 @@
+Feature: Tasks API Integration
+
+  @allure.label.suite:Tasks
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: User creates task and can retrieve it
+    Given the user is authenticated in a project
+    When the user creates a task via API
+    Then the task creation should return status 200
+    And the task should have a valid ID
+    When the user retrieves tasks in the project
+    Then the newly created task should be in the list
+
+  @allure.label.suite:Tasks
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: User can assign task to team member
+    Given the user is authenticated in a team with members
+    And a task exists
+    When the user assigns the task to a team member
+    Then the assignment should return status 200
+    When the assignee retrieves their tasks
+    Then the newly assigned task should appear in their list
+
+  @allure.label.suite:Tasks
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Task status transitions flow through multiple states
+    Given a task exists in "To Do" status
+    When the task is updated to "In Progress"
+    Then the API should return status 200
+    When the task is updated to "In Review"
+    Then the API should return status 200
+    When the task is updated to "Complete"
+    Then the status should be persisted
+    When the user retrieves the task
+    Then the status should be "Complete"
+
+  @allure.label.suite:Tasks
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Multiple users can sequentially update task state
+    Given user A and user B are in the same team
+    When user A creates a task
+    And user B retrieves the newly created task
+    Then user B should see the task
+    When user B assigns the task to themselves
+    And user A updates the task description
+    Then both operations should succeed with status 200
+
+  @allure.label.suite:Tasks
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Task deletion removes it from all queries
+    Given a task exists in a project
+    When the user deletes the task
+    Then the deletion should return status 200
+    When the user retrieves project tasks
+    Then the deleted task should not be in the list
+    When the user attempts to retrieve the deleted task directly
+    Then the API should return status 404
+
+  @allure.label.suite:Tasks
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Users can only see tasks assigned to them or created by them
+    Given user A and user B in the same team
+    When user A creates a task and does not assign it
+    And user B retrieves their task list
+    Then user B should not see user A's unassigned task
+    When user A assigns the task to user B
+    And user B retrieves their task list again
+    Then the task should now appear in user B's list
