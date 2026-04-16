@@ -1,6 +1,4 @@
 {
-    "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "automatic",
     "python.testing.pytestArgs": [
         "qa"
     ],

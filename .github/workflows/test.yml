@@ -2,6 +2,11 @@ name: Auto Test
 
 on:
   workflow_dispatch:
+    inputs:
+      app_branch:
+        description: "Branch of the app repo to test"
+        required: false
+        default: "frontend/team"  # TODO to update to main or develop when ready
   pull_request:
     branches: [main, develop]
 
@@ -13,15 +18,20 @@ permissions:
   checks: write
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Checkout repo
+      - name: Checkout QA repo
         uses: actions/checkout@v4
 
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+        with:
+          repository: Francis-Rai/team-tesk-manager
+          ref: ${{ github.event.inputs.app_branch || 'frontend/team' }}
+          path: app
 
       # Install Python
       - name: Setup Python
@@ -29,12 +39,10 @@ jobs:
         with:
           python-version: "3.13"
 
-
       # Install dependencies
       - name: Install dependencies
         run: |
           pip install -r qa/requirements.txt
-
 
       # Install Allure CLI
       - name: Install Allure
@@ -44,6 +52,7 @@ jobs:
 
       # Start docker environment
       - name: Start containers
+        working-directory: app
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -128,4 +137,5 @@ jobs:
 
       - name: Stop containers
         if: always()
+        working-directory: app
         run: docker compose down
