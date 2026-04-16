@@ -137,4 +137,5 @@ jobs:
 
       - name: Stop containers
         if: always()
+        working-directory: app
         run: docker compose down
