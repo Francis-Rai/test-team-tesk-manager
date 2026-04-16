@@ -1,1 +1,1 @@
-{"id":"1596cbedc1630471bbcf0e1c1a5232e1","fullName":"qa.tests.api.test_register.TestRegister#test_register_successful","name":"Register with whitespaces","status":"passed","testResultsByEnv":{"default":"8e240a40c57d949681b6f29f0fc3034a"}}
+{"id":"1596cbedc1630471bbcf0e1c1a5232e1","fullName":"qa.tests.api.test_register.TestRegister#test_register_successful","name":"Register with whitespaces","status":"passed","testResultsByEnv":{"default":"7be4813e66ff9119dcd3d97ff024eb72"}}

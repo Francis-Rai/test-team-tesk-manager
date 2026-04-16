@@ -1,1 +1,1 @@
-{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"c6d95b14c41c0ae1f51fbc8cf897df39"}}
+{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"Password is not a strong password","status":"failed","testResultsByEnv":{"default":"a6ca051e412ee98320bf5ffb7b71e9e1"}}

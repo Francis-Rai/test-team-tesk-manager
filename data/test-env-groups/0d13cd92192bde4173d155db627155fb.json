@@ -1,1 +1,1 @@
-{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"Missing password","status":"failed","testResultsByEnv":{"default":"0b9d231ec132e925710cd115a602ab52"}}
+{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"Email is not a string","status":"failed","testResultsByEnv":{"default":"19aa8bb863c9e1abffba6b4e5ffcfa0a"}}

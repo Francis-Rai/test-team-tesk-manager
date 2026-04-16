@@ -1,1 +1,1 @@
-{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"755e01c22b511b428c1e844c6832c079"}}
+{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Changing own SUPER_ADMIN role to USER","status":"failed","testResultsByEnv":{"default":"8bd7289d2d533e350a07d0bd326f4040"}}
