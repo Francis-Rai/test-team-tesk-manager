@@ -1,0 +1,45 @@
+Feature: Teams API Integration
+
+  @allure.label.suite:Teams
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: User creates team and can retrieve it
+    Given the user is authenticated
+    When the user creates a new team via API
+    Then the team creation API should return status 200
+    And the team should have a valid ID
+    When the user retrieves all teams
+    Then the newly created team should be in the list
+
+  @allure.label.suite:Teams
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Team owner can invite members and retrieve team members list
+    Given the user is authenticated and owns a team
+    When the user invites a new member via API
+    Then the invitation API should return status 200
+    When the user retrieves team members
+    Then the invited user should appear with "pending" status
+    When the invited user accepts the invitation
+    Then the invitee's status should change to "active"
+
+  @allure.label.suite:Teams
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: Only team owner can modify team settings
+    Given user A is the team owner
+    And user B is a regular team member
+    When user B attempts to update team settings
+    Then the API should return status 403
+    When user A updates team settings
+    Then the update should succeed with status 200
+
+  @allure.label.suite:Teams
+  @allure.label.tag:api
+  @allure.label.tag:integration
+  Scenario: User can delete team and it no longer exists
+    Given the user is authenticated and owns a team
+    When the user deletes the team via API
+    Then the deletion should return status 200
+    When the user retrieves all teams
+    Then the deleted team should not be in the list

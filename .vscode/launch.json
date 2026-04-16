@@ -22,6 +22,7 @@
         "--test-types", "api",
         "--serve",
         "--port", "63079",
+        "--additional-args", "-k", "register"
       ],
       "console": "integratedTerminal",
     },
@@ -34,7 +35,22 @@
         "--test-types", "bdd",
         "--serve",
         "--port", "63079",
+        // "--additional-args", "--tags", "user"
       ],
+      "console": "integratedTerminal",
+    },
+    {
+      "name": "Run UI Tests",
+      "type": "python",
+      "request": "launch",
+      "module": "qa.tests.ui-selenium.base",
+      // "program": "${workspaceFolder}/qa/tests/ui-selenium/base.py",
+      // "args": [
+      //   "--test-types", "bdd",
+      //   "--serve",
+      //   "--port", "63079",
+      //   // "--additional-args", "--tags", "user"
+      // ],
       "console": "integratedTerminal",
     }
   ]

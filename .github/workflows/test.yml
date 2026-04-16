@@ -2,24 +2,36 @@ name: Auto Test
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
+    inputs:
+      app_branch:
+        description: "Branch of the app repo to test"
+        required: false
+        default: "frontend/team"  # TODO to update to main or develop when ready
+  pull_request:
+    branches: [main, develop]
 
 permissions:
   contents: write
   pages: write
   id-token: write
+  pull-requests: write
+  checks: write
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
 
     steps:
 
-      - name: Checkout repo
+      - name: Checkout QA repo
         uses: actions/checkout@v4
 
+      - name: Checkout app repo
+        uses: actions/checkout@v4
+        with:
+          repository: Francis-Rai/team-tesk-manager
+          ref: ${{ github.event.inputs.app_branch || 'frontend/team' }}
+          path: app
 
       # Install Python
       - name: Setup Python
@@ -27,12 +39,10 @@ jobs:
         with:
           python-version: "3.13"
 
-
       # Install dependencies
       - name: Install dependencies
         run: |
           pip install -r qa/requirements.txt
-
 
       # Install Allure CLI
       - name: Install Allure
@@ -42,6 +52,7 @@ jobs:
 
       # Start docker environment
       - name: Start containers
+        working-directory: app
         env:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -88,7 +99,22 @@ jobs:
           fi
 
       - name: Run tests and generate report
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          BOOTSTRAP_ADMIN_EMAIL: ${{ secrets.BOOTSTRAP_ADMIN_EMAIL }}
+          BOOTSTRAP_ADMIN_PASSWORD: ${{ secrets.BOOTSTRAP_ADMIN_PASSWORD }}
         run: python qa/app.py --test-types api bdd
+
+      - name: Run Allure Action
+        if: always() && steps.backend_check.outcome == 'success'
+        uses: allure-framework/allure-action@v0
+        with:
+          # Path to the generated report directory
+          # By default, it's set to `./allure-report`
+          report-directory: "./allure-report"
+          # GitHub Token that's used for posting the comments in Pull Requests
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       # Deploy report to gh-pages
       - name: Deploy report
@@ -111,4 +137,5 @@ jobs:
 
       - name: Stop containers
         if: always()
+        working-directory: app
         run: docker compose down
