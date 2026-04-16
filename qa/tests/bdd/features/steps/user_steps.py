@@ -1,6 +1,5 @@
 from behave import given, when, then
-from hamcrest import assert_that, equal_to, has_key, instance_of
-from qa.utils.common import generate_email, generate_password
+from hamcrest import assert_that, equal_to, instance_of
 from qa.config.enums import UserRole
 from qa.models.entity.user import User
 from qa.config.settings import SUPER_USER_EMAIL, SUPER_USER_PASSWORD
