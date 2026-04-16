@@ -1,1 +1,1 @@
-{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"Email is not a string","status":"failed","testResultsByEnv":{"default":"19aa8bb863c9e1abffba6b4e5ffcfa0a"}}
+{"id":"0d13cd92192bde4173d155db627155fb","fullName":"qa.tests.api.test_login.TestLogin#test_login_exceptions","name":"Email is null","status":"failed","testResultsByEnv":{"default":"0fc0e797fe842a61fc8c7ab01c2cd93f"}}

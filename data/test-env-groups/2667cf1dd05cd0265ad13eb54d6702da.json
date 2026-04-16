@@ -1,1 +1,1 @@
-{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Changing own SUPER_ADMIN role to USER","status":"failed","testResultsByEnv":{"default":"8bd7289d2d533e350a07d0bd326f4040"}}
+{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Missing Authorization token","status":"failed","testResultsByEnv":{"default":"1f8f4fcc70ff3cbc90327bd267e7145d"}}
