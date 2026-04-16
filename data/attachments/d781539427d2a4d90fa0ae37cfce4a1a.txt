@@ -1,0 +1,24 @@
+Status: 403
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Content-Length: 210
+Date: Thu, 16 Apr 2026 06:13:37 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+{
+  "status": 403,
+  "error": "FORBIDDEN",
+  "message": "You do not have permission to perform this action.",
+  "path": "/api/admin/users/1d0d55b1-5179-4dd8-b644-3bd7cc7d196d/role",
+  "timestamp": "2026-04-16T06:13:37.692346908Z"
+}

@@ -1,1 +1,1 @@
-{"id":"1596cbedc1630471bbcf0e1c1a5232e1","fullName":"qa.tests.api.test_register.TestRegister#test_register_successful","name":"Register with unique email","status":"passed","testResultsByEnv":{"default":"6022a89371e2a57d4bbcd3fc427206db"}}
+{"id":"1596cbedc1630471bbcf0e1c1a5232e1","fullName":"qa.tests.api.test_register.TestRegister#test_register_successful","name":"Register with whitespaces","status":"passed","testResultsByEnv":{"default":"9b4f9021704b53c87d0c993094123b3f"}}

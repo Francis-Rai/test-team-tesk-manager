@@ -1,1 +1,1 @@
-{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"Password is not a strong password","status":"failed","testResultsByEnv":{"default":"8c664a810f5ee833c3421b3896d6d0ad"}}
+{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"Register with an email already registered","status":"failed","testResultsByEnv":{"default":"2a68e0e5feab60fbfa0ebe7e2c3ab33d"}}

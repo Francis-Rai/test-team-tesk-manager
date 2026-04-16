@@ -1,1 +1,1 @@
-{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Missing Authorization token","status":"failed","testResultsByEnv":{"default":"6269d8ba25a9818737c6380c103ddb11"}}
+{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Nonexistent role","status":"failed","testResultsByEnv":{"default":"8b5fe10c40bebdcffffeea36d27e60d4"}}
