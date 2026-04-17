@@ -7,11 +7,12 @@ import shutil
 from behave.__main__ import main as behave_main
 
 
-TEST_PATHS = {"api": "api", "bdd": "bdd/features"}
+TEST_PATHS = {"api": "api", "bdd": "bdd/features", "ui": "ui/features"}
 
 COMMANDS = {
     "api": "{test_path} --alluredir={results} --allure-no-capture {args}",
     "bdd": "{test_path} -f allure_behave.formatter:AllureFormatter --outfile={results} {args}",
+    "ui": "{test_path} -f allure_behave.formatter:AllureFormatter --outfile={results} {args}",
 }
 
 ALLURE_RESULTS = "allure-results"
@@ -33,7 +34,7 @@ def run_command(command, test_type="", ignore_failures=False):
             # Remove the "pytest" word from template since we'll call pytest.main
             pytest_args = command.split()
             exit_code = pytest.main(pytest_args)
-        elif test_type == "bdd":
+        elif test_type in ["bdd", "ui"]:
             behave_args = command.split()
             exit_code = behave_main(behave_args)
         else:

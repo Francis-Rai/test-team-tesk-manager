@@ -1,6 +1,17 @@
 import secrets
 import string
+import faker
 
+fake = faker.Faker()
+
+
+def generate_register_data():
+    return {
+        "first_name": fake.first_name(),
+        "last_name": fake.last_name(),
+        "email": generate_email(),
+        "password": generate_password(),
+    }
 
 def generate_password(length=12):
     allowed_symbols = "!@#$%^&*()_+-[]{};':\"\\|,.<>/?"

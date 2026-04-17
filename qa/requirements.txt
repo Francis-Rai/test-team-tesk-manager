@@ -9,3 +9,6 @@ allure-behave
 psycopg2
 jsonschema
 PyHamcrest
+playwright
+pytest-playwright
+faker
