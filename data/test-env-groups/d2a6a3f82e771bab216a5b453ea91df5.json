@@ -1,1 +1,1 @@
-{"id":"d2a6a3f82e771bab216a5b453ea91df5","fullName":"qa.tests.api.test_get_all_users.TestGetAllUsers#test_get_all_users_exceptions","name":"Incorrect request method","status":"failed","testResultsByEnv":{"default":"b0879d2fae0691b4baad5fbd699d457a"}}
+{"id":"d2a6a3f82e771bab216a5b453ea91df5","fullName":"qa.tests.api.test_get_all_users.TestGetAllUsers#test_get_all_users_exceptions","name":"Invalid Authorization token","status":"failed","testResultsByEnv":{"default":"b36704fdebf2d5be7489d0cd9287bf5c"}}

@@ -1,1 +1,1 @@
-{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Nonexistent role","status":"failed","testResultsByEnv":{"default":"8b5fe10c40bebdcffffeea36d27e60d4"}}
+{"id":"2667cf1dd05cd0265ad13eb54d6702da","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_exceptions","name":"Change another user's role as a normal user","status":"failed","testResultsByEnv":{"default":"2e3fddff38cfe8c4b44cf69f389f1034"}}
