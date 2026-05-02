@@ -73,6 +73,15 @@ def attach_api_data(request_payload, response, endpoint=""):
         response_text, name=f"[Response] {method} {endpoint}", attachment_type=allure.attachment_type.TEXT
     )
 
+
+def add_attachment(screenshot, name="screenshot", attachment_type=allure.attachment_type.PNG):
+    allure.attach(
+        screenshot,
+        name=name,
+        attachment_type=attachment_type
+    )
+
+
 def assert_error_response(actual: ErrorResponse, expected: dict):
     for key, value in expected.items():
         actual_value = getattr(actual, key)

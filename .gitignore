@@ -4,3 +4,4 @@
 /allure-results
 test-history/allure-history.jsonl
 /screenshots
+/logs
