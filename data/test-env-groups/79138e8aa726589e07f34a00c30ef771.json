@@ -1,1 +1,1 @@
-{"id":"79138e8aa726589e07f34a00c30ef771","fullName":"qa.tests.api.test_login.TestLogin#test_login_successful","name":"Login as a super user","status":"failed","testResultsByEnv":{"default":"868f5a78d2c423e4909fe581833615c6"}}
+{"id":"79138e8aa726589e07f34a00c30ef771","fullName":"qa.tests.api.test_login.TestLogin#test_login_successful","name":"Login as a user","status":"failed","testResultsByEnv":{"default":"b618399c9a4e53c98ebfe79bf004ce2a"}}
