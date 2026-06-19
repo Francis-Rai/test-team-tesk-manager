@@ -1,0 +1,25 @@
+Status: 401
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+Allow: POST
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Content-Length: 166
+Date: Fri, 19 Jun 2026 03:25:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+{
+  "status": 401,
+  "error": "UNAUTHORIZED",
+  "message": "Full authentication is required to access this resource",
+  "path": "/error",
+  "timestamp": "2026-06-19T03:25:29.173669851Z"
+}

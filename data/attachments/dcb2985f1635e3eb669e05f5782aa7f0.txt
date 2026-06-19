@@ -1,0 +1,29 @@
+Status: 200
+
+Headers:
+Vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers
+Set-Cookie: refresh_token=5gkP8PeL093WpN_kqz9e5yTpXjCDUQ7V6wcY2R3mRa9HFXAHe3LFbntAGqBy0_0rA42UxNOksSGWyGm4clxzIA; Path=/api/auth; Max-Age=2592000; Expires=Sun, 19 Jul 2026 03:25:29 GMT; HttpOnly; SameSite=Lax
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 0
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Type: application/json
+Transfer-Encoding: chunked
+Date: Fri, 19 Jun 2026 03:25:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+
+Body:
+{
+  "token": "eyJhbGciOiJI...LXJpqR",
+  "expiresInSeconds": 900,
+  "user": {
+    "userId": "b7bbe7fa-77de-4107-a2fa-a116e817c9b0",
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "user_5dba92e9@test.com",
+    "role": "USER"
+  }
+}

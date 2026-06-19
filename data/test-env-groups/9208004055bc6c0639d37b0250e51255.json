@@ -1,1 +1,1 @@
-{"id":"9208004055bc6c0639d37b0250e51255","fullName":"qa.tests.api.test_get_all_users.TestGetAllUsers#test_get_all_users_successful","name":"Get all users as a normal user","status":"passed","testResultsByEnv":{"default":"bdb8d050000029636b406705457385cd"}}
+{"id":"9208004055bc6c0639d37b0250e51255","fullName":"qa.tests.api.test_get_all_users.TestGetAllUsers#test_get_all_users_successful","name":"test_get_all_users_successful[SUPER_ADMIN-test_data2]","status":"failed","testResultsByEnv":{"default":"257c7f6d20bd792c94393baacee25302"}}
