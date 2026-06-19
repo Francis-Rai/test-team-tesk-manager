@@ -43,14 +43,13 @@
       "name": "Run UI Tests",
       "type": "python",
       "request": "launch",
-      "module": "qa.tests.ui-selenium.base",
-      // "program": "${workspaceFolder}/qa/tests/ui-selenium/base.py",
-      // "args": [
-      //   "--test-types", "bdd",
-      //   "--serve",
-      //   "--port", "63079",
-      //   // "--additional-args", "--tags", "user"
-      // ],
+      "program": "${workspaceFolder}/qa/app.py",
+      "args": [
+        "--test-types", "ui",
+        "--serve",
+        "--port", "63079",
+        "--additional-args", "--no-capture", "--no-color"
+      ],
       "console": "integratedTerminal",
     }
   ]

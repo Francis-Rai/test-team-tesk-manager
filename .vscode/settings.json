@@ -4,5 +4,5 @@
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
-    "behave-vsc.featuresPath": "qa/tests/bdd/features"
+    "behave-vsc.featuresPath": "qa/tests"
 }
