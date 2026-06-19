@@ -1,0 +1,11 @@
+GET http://localhost:8080/api/users
+
+Headers:
+User-Agent: python-requests/2.34.2
+Accept-Encoding: gzip, deflate
+Accept: */*
+Connection: keep-alive
+Authorization: Bearer eyJhb...G93ufq
+
+Body:
+null

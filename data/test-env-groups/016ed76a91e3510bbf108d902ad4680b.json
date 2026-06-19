@@ -1,1 +1,1 @@
-{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"Password is less than minimum length","status":"failed","testResultsByEnv":{"default":"b64ae6479a38974bc32b5a72752535b7"}}
+{"id":"016ed76a91e3510bbf108d902ad4680b","fullName":"qa.tests.api.test_register.TestRegister#test_register_exceptions","name":"lastName is not a string","status":"failed","testResultsByEnv":{"default":"6e313d8406dd5ffab75f1e8a886150cc"}}

@@ -1,1 +1,1 @@
-{"id":"dff7f326d584cebf739062bf3ccdadf3","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_successful","name":"Change user role to super admin","status":"passed","testResultsByEnv":{"default":"f3945376133e112e9c247158976cd49c"}}
+{"id":"dff7f326d584cebf739062bf3ccdadf3","fullName":"qa.tests.api.test_change_user_role.TestChangeUserRole#test_change_user_role_successful","name":"Change user role to admin","status":"passed","testResultsByEnv":{"default":"91d9f11154993144dd74b2d506d7780c"}}
